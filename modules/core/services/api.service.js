@@ -1,17 +1,17 @@
 /**
- * Servicio HTTP compartido para centralizar la comunicacion con la API.
- * Encapsula la URL base, headers, lectura del envelope ApiResponse y metodos HTTP comunes.
+ * Servicio HTTP compartido para centralizar la comunicación con la API.
+ * Encapsula la URL base, headers, lectura del envelope ApiResponse y métodos HTTP comunes.
  */
 const ApiService = (() => {
-    const API_ORIGIN = 'https://api-herrera-deega3a2e8d8cbge.canadacentral-01.azurewebsites.net/api';
+    const API_ORIGIN = 'https://api-herrera-deega3a2e8d8cbge.canadacentral-01.azurewebsites.net';
     const BASE_URL = `${API_ORIGIN}/api`;
 
-    function getApiOrigin() {
-        return API_ORIGIN;
+    function getApiOrigin() { 
+        return API_ORIGIN; 
     }
 
-    function getBaseUrl() {
-        return BASE_URL;
+    function getBaseUrl() { 
+        return BASE_URL; 
     }
 
     function getAuthHeaders() {
@@ -50,7 +50,9 @@ const ApiService = (() => {
     }
 
     async function request(path, options = {}) {
-        const response = await fetch(`${BASE_URL}${path}`, options);
+        // Asegura que la ruta empiece con / si se omite al invocar
+        const formattedPath = path.startsWith('/') ? path : `/${path}`;
+        const response = await fetch(`${BASE_URL}${formattedPath}`, options);
         return await readEnvelope(response);
     }
 
