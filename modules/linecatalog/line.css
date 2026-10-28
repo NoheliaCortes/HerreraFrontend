@@ -1,0 +1,96 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .main-content { margin-left: 0; padding: var(--space-4); }
+    .topbar { left: 0; }
+    .data-table { min-width: 700px; }
+}
+
+/* =============================================
+   DATA TABLE 
+   ============================================= */
+.table-card {
+    background: var(--color-white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-primary);
+}
+
+.data-table thead th {
+    background: var(--color-bg-page);
+    padding: var(--space-4) var(--space-6);
+    font-size: 12px;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-hint);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    text-align: left;
+    border-bottom: 1px solid #E2E8F0;
+    white-space: nowrap;
+}
+
+.data-table thead th:first-child { padding-left: var(--space-8); }
+
+.data-table tbody tr { transition: all .2s ease; }
+.data-table tbody tr:hover { background: var(--color-bg-page); }
+
+.data-table tbody td {
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid #F1F5F9;
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-body);
+    vertical-align: middle;
+}
+
+.data-table tbody td:first-child { padding-left: var(--space-8); }
+.data-table tbody tr:last-child td { border-bottom: none; }
+
+/* =============================================
+   BOTÓN DETALLE
+   ============================================= */
+.action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-button);
+    border: 1px solid #E2E8F0;
+    background: var(--color-white);
+    color: var(--color-brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .25s ease;
+    box-shadow: var(--shadow-card);
+}
+
+.action-btn:hover {
+    background: var(--color-brand);
+    color: var(--color-white);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 194, 150, 0.2);
+}
+
+.action-btn i,
+.action-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Centrado automático*/
+.data-table thead th, 
+.data-table tbody td {
+    text-align: center !important;
+}
+
+

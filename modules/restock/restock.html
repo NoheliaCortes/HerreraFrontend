@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nuevo Reabastecimiento</title>
+    <link rel="stylesheet" href="../../styles/variables.css" />
+    <link rel="stylesheet" href="../../styles/reset.css" />
+    <link rel="stylesheet" href="../../styles/global.css" />
+    <link rel="stylesheet" href="../../styles/layout.css" />
+
+    <link rel="stylesheet" href="../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../shared/components/topbar/topbar.css" />
+    <link rel="stylesheet" href="../shared/components/stat-card/stat-card.css" />
+    <link rel="stylesheet" href="../shared/components/buttons/buttons.css" />
+    <link rel="stylesheet" href="/modules/restock/restock.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  </head>
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../shared/components/sidebar/sidebar.js"></script>
+
+    <div id="topbar-placeholder"></div>
+    <script src="../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content animate-in">
+      <div class="page-header">
+        <div class="header-title">
+          <h1>Nuevo reabastecimiento</h1>
+          <p>Registra lotes nuevos en inventario. El código y el usuario se asignan automáticamente al guardar.</p>
+        </div>
+        <a class="btn-outline page-back-link" href="/modules/restock/pages/restock-dashboard/restock-dashboard.html">
+          <i data-lucide="arrow-left"></i>
+          Volver al dashboard
+        </a>
+      </div>
+
+      <div class="scroll-area">
+        <div id="formMessage" class="form-message" hidden></div>
+
+        <div class="form-card restock-header-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Información del reabastecimiento</h3>
+              <p class="section-subtitle">Datos generales de la entrada. </p>
+            </div>
+          </div>
+
+          <div class="restock-info-grid">
+            <div class="readonly-field">
+              <span class="readonly-label">Código de restock</span>
+              <span class="readonly-value muted">Se generará automáticamente al guardar</span>
+            </div>
+            <div class="readonly-field">
+              <span class="readonly-label">Registrado por</span>
+              <span class="readonly-value" id="loggedUserName">Usuario autenticado</span>
+              <span class="readonly-helper" id="loggedUserMeta">Solo informativo</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="restockNotes">Notas</label>
+              <textarea
+                class="form-input form-textarea"
+                id="restockNotes"
+                rows="3"
+                placeholder="Ej: Producción semanal, entrada extraordinaria..."
+              ></textarea>
+              <span class="form-helper">Opcional. Se enviará como nota general del reabastecimiento.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Lotes del reabastecimiento</h3>
+              <p class="section-subtitle">Cada lote requiere producto, cantidad, costo unitario y fecha de vencimiento.</p>
+            </div>
+            <button class="btn-primary" type="button" id="btnAddBatch">
+              <i data-lucide="plus"></i>
+              Agregar lote
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 40px">#</th>
+                  <th>Código lote</th>
+                  <th>Producto</th>
+                  <th>Cantidad inicial</th>
+                  <th>Costo unitario</th>
+                  <th>Costo total</th>
+                  <th>Vencimiento</th>
+                  <th style="text-align: center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="batchesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-item summary-copy">
+            <span class="summary-label">Resumen del reabastecimiento</span>
+            <span class="summary-sub">Se actualiza conforme agregas lotes.</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-value" id="summaryBatches">0</span>
+            <span class="summary-label">Lotes</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-value" id="summaryUnits">0</span>
+            <span class="summary-label">Unidades totales</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-value" id="summaryInvestment">C$ 0.00</span>
+            <span class="summary-label">Inversión total</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-value" id="summaryAverageCost">C$ 0.00</span>
+            <span class="summary-label">Costo promedio</span>
+          </div>
+        </div>
+
+        <div class="bottom-actions">
+          <button class="btn-outline" type="button" id="btnCancelRestock">Limpiar formulario</button>
+          <button class="btn-primary" type="button" id="btnSaveRestock">
+            <i data-lucide="check-circle"></i>
+            Guardar reabastecimiento
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <div class="modal-overlay" id="modalReabastecimiento" onclick="closeModalOnOverlay(event)">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-header-icon">
+            <i data-lucide="package-plus"></i>
+          </div>
+          <div>
+            <h2 class="modal-title" id="modalTitle">Agregar lote</h2>
+            <p class="modal-subtitle" id="modalSubtitle">Registra los datos del lote a crear</p>
+          </div>
+          <button class="modal-close" type="button" onclick="closeModal()">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <form class="modal-body" id="formReabastecimiento">
+          <div id="modalError" class="modal-error" hidden></div>
+
+          <div class="modal-row">
+            <div class="modal-field">
+              <label class="modal-label" for="modalLine">Línea <span class="required">*</span></label>
+              <select class="modal-input modal-select" id="modalLine" required>
+                <option value="">Cargando líneas...</option>
+              </select>
+            </div>
+            <div class="modal-field">
+              <label class="modal-label" for="modalLinePresentation">Presentación <span class="required">*</span></label>
+              <select class="modal-input modal-select" id="modalLinePresentation" required disabled>
+                <option value="">Selecciona una línea primero</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-row">
+            <div class="modal-field">
+              <label class="modal-label" for="modalFlavor">Sabor <span class="required">*</span></label>
+              <select class="modal-input modal-select" id="modalFlavor" required disabled>
+                <option value="">Selecciona una presentación primero</option>
+              </select>
+            </div>
+            <div class="modal-field">
+              <label class="modal-label" for="modalProductName">Producto</label>
+              <input
+                class="modal-input"
+                type="text"
+                id="modalProductName"
+                placeholder="Se llenará automáticamente"
+                readonly
+              />
+              <input type="hidden" id="modalProductId" />
+            </div>
+          </div>
+
+          <div class="modal-row">
+            <div class="modal-field">
+              <label class="modal-label" for="modalCantidad">Cantidad inicial <span class="required">*</span></label>
+              <input class="modal-input" type="number" id="modalCantidad" min="1" step="1" placeholder="0" required />
+            </div>
+            <div class="modal-field">
+              <label class="modal-label" for="modalCosto">Costo unitario <span class="required">*</span></label>
+              <div class="modal-input-prefix">
+                <span class="input-prefix">C$</span>
+                <input
+                  class="modal-input modal-input--prefixed"
+                  type="number"
+                  id="modalCosto"
+                  min="0.01"
+                  step="0.01"
+                  placeholder="0.00"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-row">
+            <div class="modal-field">
+              <label class="modal-label" for="modalVencimiento">Vencimiento <span class="required">*</span></label>
+              <input class="modal-input" type="date" id="modalVencimiento" required />
+            </div>
+            <div class="readonly-field modal-total">
+              <span class="readonly-label">Costo total estimado</span>
+              <span class="readonly-value" id="modalTotalCost">C$ 0.00</span>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-outline" type="button" onclick="closeModal()">Cancelar</button>
+            <button class="btn btn-primary" type="submit">
+              <i data-lucide="save"></i>
+              Guardar lote
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="./models/restock.model.js"></script>
+    <script src="../core/services/api.service.js"></script>
+    <script src="./services/restock.service.js"></script>
+    <script src="./restock.js"></script>
+  </body>
+</html>

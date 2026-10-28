@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movimientos de Inventario</title>
+
+    <link rel="stylesheet" href="../../../../styles/variables.css" />
+    <link rel="stylesheet" href="../../../../styles/reset.css" />
+    <link rel="stylesheet" href="../../../../styles/global.css" />
+    <link rel="stylesheet" href="../../../../styles/layout.css" />
+
+    <link rel="stylesheet" href="../../../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../../../shared/components/topbar/topbar.css" />
+    <link rel="stylesheet" href="../../../shared/components/filter-bar/filter-bar.css" />
+    <link rel="stylesheet" href="../../../shared/components/stat-card/stat-card.css" />
+    <link rel="stylesheet" href="../../../shared/components/buttons/buttons.css" />
+    <link rel="stylesheet" href="../../components/inventory-movement-detail-drawer/inventory-movement-detail-drawer.component.css" />
+    <link rel="stylesheet" href="../../components/inventory-movement-form-modal/inventory-movement-form-modal.component.css" />
+    <link rel="stylesheet" href="./inventory-movements-dashboard.css" />
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../../../shared/components/sidebar/sidebar.js"></script>
+
+    <div id="topbar-placeholder"></div>
+    <script src="../../../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content">
+      <div class="page-header animate-in">
+        <div class="page-header-left">
+          <h1>Movimientos de Inventario</h1>
+        </div>
+        <div class="page-header-actions inventory-movement-actions">
+          <button class="btn btn-primary movement-action" type="button" data-movement-action="transfer">
+            <i data-lucide="arrow-left-right" style="width: 16px; height: 16px"></i>
+            <span class="btn-label">Registrar transferencia</span>
+          </button>
+          <button class="btn btn-outline movement-action" type="button" data-movement-action="positive">
+            <i data-lucide="plus-circle" style="width: 16px; height: 16px"></i>
+            <span class="btn-label">Registrar ajuste positivo</span>
+          </button>
+          <button class="btn btn-outline movement-action" type="button" data-movement-action="negative">
+            <i data-lucide="minus-circle" style="width: 16px; height: 16px"></i>
+            <span class="btn-label">Registrar ajuste negativo</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="inventory-movement-alert" id="dashboardMessage" role="status" aria-live="polite"></div>
+
+      <div class="stats-row stats-row--five animate-in delay-1">
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="activity" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Movimientos realizados hoy</div>
+          <div class="stat-card-value" id="statMovementsToday">-</div>
+        </div>
+
+        <div class="stat-card stat-card-coral">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="package-plus" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Reabastecimientos hoy</div>
+          <div class="stat-card-value" id="statRestocksToday">-</div>
+        </div>
+
+        <div class="stat-card stat-card-purple">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="arrow-left-right" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Transferencias hoy</div>
+          <div class="stat-card-value" id="statTransfersToday">-</div>
+        </div>
+
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="plus-circle" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Ajustes positivos hoy</div>
+          <div class="stat-card-value" id="statPositiveAdjustmentsToday">-</div>
+        </div>
+
+        <div class="stat-card stat-card-coral">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="minus-circle" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Ajustes negativos hoy</div>
+          <div class="stat-card-value" id="statNegativeAdjustmentsToday">-</div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-field filter-search">
+          <label class="filter-label">Buscar</label>
+          <div class="filter-input-wrapper">
+            <input type="text" class="filter-input" placeholder="Busqueda local por tipo o usuario" id="searchInput" />
+            <i data-lucide="search" class="filter-icon"></i>
+          </div>
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-actions">
+          <button type="button" class="filter-btn filter-btn--clear" id="btnClearFilters">
+            <i data-lucide="x"></i> Limpiar
+          </button>
+          <button type="button" class="filter-btn filter-btn--primary" id="btnApplyFilters">
+            <i data-lucide="search"></i> Buscar
+          </button>
+        </div>
+      </div>
+
+      <div class="results-card animate-in delay-3">
+        <div class="results-header">
+          <h2>
+            <span>Resultados</span>
+            <span class="count-badge" id="resultCount">0</span>
+          </h2>
+          <div class="results-actions">
+            <button class="btn btn-outline" type="button" id="btnRefresh">
+              <i data-lucide="refresh-cw" style="width: 14px; height: 14px"></i>
+              Actualizar
+            </button>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 28%">Tipo de movimiento</th>
+                <th style="width: 22%">Fecha</th>
+                <th style="width: 28%">Usuario creador</th>
+                <th style="width: 22%; text-align: center">Detalle</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryMovementsTableBody">
+              <tr>
+                <td colspan="4" class="table-loading">Cargando movimientos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-footer">
+          <div class="rows-per-page">
+            <span>Filas por pagina:</span>
+            <select id="rowsPerPage">
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <div class="table-footer-info">
+            Mostrando <strong id="showingFrom">0</strong> de
+            <strong id="showingTotal">0</strong> registros
+          </div>
+          <div class="pagination"></div>
+        </div>
+      </div>
+    </main>
+
+    <div id="inventory-movement-detail-drawer-placeholder"></div>
+    <div id="inventory-movement-form-modal-placeholder"></div>
+
+    <script src="../../../sales/models/sale.model.js"></script>
+    <script src="../../../sales/services/sales.service.js"></script>
+    <script src="../../models/inventory-movement.model.js"></script>
+    <script src="../../services/inventory-movements.service.js"></script>
+    <script src="../../components/inventory-movement-detail-drawer/inventory-movement-detail-drawer.component.js"></script>
+    <script src="../../components/inventory-movement-form-modal/inventory-movement-form-modal.component.js"></script>
+    <script src="./inventory-movements-dashboard.js"></script>
+  </body>
+</html>

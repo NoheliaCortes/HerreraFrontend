@@ -1,0 +1,278 @@
+
+
+/* Estenedor Principal */
+.pedido-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Tarjetas Estilo Figma */
+.card-pedido {
+    background-color: var(--color-white);
+    padding: var(--space-6);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+}
+
+.card-title {
+    font-size: 14px;
+    color: var(--color-text-hint);
+    margin-bottom: var(--space-4);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+}
+
+/* Grilla de Formularios */
+.grid-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-4);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-body);
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    padding: 8px 12px;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    background-color: #F8FAFC;
+}
+
+.input-readonly {
+    background-color: #F1F5F9 !important;
+    color: var(--color-text-hint);
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Selector de Productos (Resaltado) */
+.card-highlight {
+    border-left: 4px solid var(--color-brand);
+}
+
+.selector-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--space-4);
+    align-items: flex-end;
+}
+
+.input-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon i {
+    position: absolute;
+    left: 10px;
+    width: 16px;
+    color: var(--color-text-hint);
+}
+
+.input-icon input {
+    padding-left: 35px;
+    width: 100%;
+}
+
+.selector-buttons {
+    display: flex;
+    gap: var(--space-2);
+}
+
+/* Botones */
+.btn-pri {
+    background-color: var(--color-brand);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-sec {
+    background-color: var(--color-lavender);
+    color: var(--color-text-heading);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Tabla de Pedido */
+.table-section {
+    padding: 0;
+    overflow: hidden;
+}
+
+.pedido-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pedido-table th {
+    background-color: #FFE4E1; /* Rosa suave del figma */
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+    color: var(--color-text-body);
+}
+
+.pedido-table td {
+    padding: 12px;
+    border-bottom: 1px solid #F1F5F9;
+    font-size: 14px;
+}
+
+/* Footer del Pedido (Totales) */
+.pedido-footer {
+    padding: var(--space-6);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.resumen-container {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.resumen-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+}
+
+.resumen-row span {
+    font-weight: 600;
+    min-width: 80px;
+    text-align: right;
+}
+
+.resumen-row input {
+    width: 150px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #E2E8F0;
+    background: #F8FAFC;
+}
+
+.pago-input, .cambio-input {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-small-aceptar {
+    background-color: var(--color-coral);
+    border: none;
+    padding: 5px 15px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-registrar-venta {
+    background-color: #D1FAE5;
+    color: #065F46;
+    border: 1px solid #A7F3D0;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+/* Alineación de los bloques de totales */
+.resumen-final-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.resumen-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.resumen-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.resumen-row span {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.resumen-row input {
+    width: 150px;
+    padding: 8px;
+    text-align: right;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #f8fafc;
+}
+
+.input-with-btn {
+    display: flex;
+    gap: 5px;
+}
+
+.total-row span, .total-row input {
+    color: var(--color-text-heading);
+    font-size: 1.3rem;
+}
+
+.btn-registrar-venta {
+    background-color: #86E3CE; /* Color turquesa de tu diseño */
+    color: #000;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.card-highlight {
+    border-left: 5px solid var(--color-brand) !important; /* El color turquesa de tu marca */
+    background-color: var(--color-white);
+    padding: var(--space-6);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    margin-bottom: var(--space-4); /* Separación entre tarjetas */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}

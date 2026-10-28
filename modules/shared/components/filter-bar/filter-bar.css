@@ -1,0 +1,233 @@
+:root {
+  /*  Paleta & Variables */
+  --fb-bg: #ffffff;
+  --fb-brand: #00C296;
+  --fb-brand-hover: #00a680;
+  --fb-coral: #FF6B6B;
+  --fb-text: #111827;
+  --fb-text-hint: #64748b;
+  --fb-border: #E2E8F0;
+  --fb-bg-input: #F8FAFC;
+  --fb-divider: #E2E8F0;
+  
+  /* Dimensiones */
+  --fb-radius-container: 14px;
+  --fb-radius-input: 10px;
+  --fb-padding-container: 16px 20px;
+  --fb-padding-input: 10px 14px;
+  --fb-font-size: 13px;
+  --fb-font-size-label: 11px;
+  
+  /* Sombras & Transiciones */
+  --fb-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  --fb-transition: all 0.2s ease;
+  --fb-font-family: system-ui, -apple-system, 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* Animación de entrada */
+@keyframes filterBarEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+/*  Contenedor Principal */
+.filter-bar {
+  background: var(--fb-bg);
+  border: 1px solid #f1f5f9;
+  border-radius: var(--fb-radius-container);
+  padding: var(--fb-padding-container);
+  box-shadow: var(--fb-shadow);
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  animation: filterBarEnter 0.45s ease-out;
+}
+
+/* Grupo de Campo (Label + Input/Select) */
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
+  flex: 1;
+}
+
+.filter-label {
+  font-size: var(--fb-font-size-label);
+  font-weight: 600;
+  color: var(--fb-text-hint);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+/*  Inputs & Selects Base */
+.filter-input,
+.filter-select {
+  width: 100%;
+  padding: var(--fb-padding-input);
+  border: 1.5px solid var(--fb-border);
+  border-radius: var(--fb-radius-input);
+  font-size: var(--fb-font-size);
+  font-family: var(--fb-font-family);
+  color: var(--fb-text);
+  background: var(--fb-bg-input);
+  transition: var(--fb-transition);
+  box-sizing: border-box;
+}
+
+.filter-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.filter-input-wrapper .filter-input {
+  padding-left: 42px; 
+  display: block;
+}
+
+
+.filter-input-wrapper .filter-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--fb-text-hint);
+  pointer-events: none;
+  transition: var(--fb-transition);
+}
+
+/* Cambio de color al hacer focus */
+.filter-input-wrapper .filter-input:focus + .filter-icon {
+  color: var(--fb-brand);
+}
+
+.filter-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  outline: none;
+  border-color: var(--fb-brand);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 194, 150, 0.1);
+}
+
+.filter-input::placeholder {
+  color: #CBD5E1;
+}
+
+/* Campo de Búsqueda */
+.filter-search {
+  position: relative;
+  min-width: 280px;
+  flex: 2;
+}
+
+.filter-search .filter-input {
+  padding-left: 42px;
+}
+
+.filter-search .filter-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--fb-text-hint);
+  pointer-events: none;
+  transition: var(--fb-transition);
+}
+
+.filter-search .filter-input:focus + .filter-icon {
+  color: var(--fb-brand);
+}
+
+/* Separadores */
+.filter-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--fb-divider);
+  align-self: center;
+  flex-shrink: 0;
+}
+
+/*  Botones de Acción */
+.filter-actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: var(--fb-radius-input);
+  font-size: var(--fb-font-size);
+  font-weight: 600;
+  font-family: var(--fb-font-family);
+  cursor: pointer;
+  transition: var(--fb-transition);
+  border: 1.5px solid transparent;
+}
+
+.filter-btn svg,
+.filter-btn i {
+  width: 14px;
+  height: 14px;
+}
+
+.filter-btn--clear {
+  background: transparent;
+  border-color: var(--fb-border);
+  color: var(--fb-text-hint);
+}
+
+.filter-btn--clear:hover {
+  border-color: var(--fb-coral);
+  color: var(--fb-coral);
+  background: rgba(255, 107, 107, 0.05);
+}
+
+.filter-btn--primary {
+  background: var(--fb-brand);
+  color: #fff;
+}
+
+.filter-btn--primary:hover {
+  background: var(--fb-brand-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 194, 150, 0.25);
+}
+
+/*  Responsive */
+@media (max-width: 768px) {
+  .filter-divider { display: none; }
+  .filter-field { min-width: 100%; }
+  .filter-search { min-width: 100%; }
+  .filter-actions { width: 100%; justify-content: flex-end; }
+}

@@ -1,0 +1,134 @@
+<div class="sale-drawer-overlay" id="saleDrawerOverlay"></div>
+<div class="sale-drawer" id="saleDrawer">
+  <div class="sale-drawer-header">
+    <div class="sale-drawer-header-top">
+      <div class="sale-drawer-title">
+        <i data-lucide="file-text"></i>
+        Detalle de la venta
+      </div>
+      <button class="sale-drawer-close" id="saleDrawerCloseBtn" type="button" aria-label="Cerrar detalle">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div class="sale-drawer-identity">
+      <div>
+        <span class="sale-drawer-code" id="drawerSaleCode">-</span>
+        <span class="sale-drawer-status" id="drawerPaymentStatus">
+          <i data-lucide="circle-dot"></i> Sin informacion
+        </span>
+      </div>
+      <div class="sale-drawer-total">
+        <div class="sale-drawer-total-label">Total de la venta</div>
+        <div class="sale-drawer-total-value" id="drawerSaleTotal">-</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sale-drawer-body">
+    <div class="drawer-section">
+      <div class="drawer-section-title">
+        <i data-lucide="info"></i> Informacion general
+      </div>
+      <div class="sale-info-grid">
+        <div class="sale-info-item">
+          <span class="sale-info-label">Codigo de venta</span>
+          <span class="sale-info-value mono" id="drawerInfoSaleCode">-</span>
+        </div>
+        <div class="sale-info-item">
+          <span class="sale-info-label">Codigo del pedido</span>
+          <span class="sale-info-value mono" id="drawerOrderCode">-</span>
+        </div>
+        <div class="sale-info-item">
+          <span class="sale-info-label">Fecha de venta</span>
+          <span class="sale-info-value" id="drawerSaleDate">-</span>
+        </div>
+        <div class="sale-info-item">
+          <span class="sale-info-label">Tipo de pago</span>
+          <span class="sale-info-value" id="drawerPaymentType">-</span>
+        </div>
+        <div class="sale-info-item">
+          <span class="sale-info-label">Registrado por</span>
+          <span class="sale-info-value" id="drawerCreatedBy">-</span>
+        </div>
+        <div class="sale-info-item">
+          <span class="sale-info-label">Saldo pendiente</span>
+          <span class="sale-info-value brand" id="drawerPendingBalance">-</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="sale-meta-cards">
+        <div class="sale-meta-card">
+          <div class="sale-meta-icon">
+            <i data-lucide="user"></i>
+          </div>
+          <div class="sale-meta-info">
+            <span class="sale-meta-label">Cliente</span>
+            <span class="sale-meta-value" id="drawerCustomerName">-</span>
+            <span class="sale-meta-sub" id="drawerCustomerLocation">-</span>
+            <span class="sale-meta-sub" id="drawerPointOfSale">-</span>
+          </div>
+        </div>
+        <div class="sale-meta-card">
+          <div class="sale-meta-icon">
+            <i data-lucide="store"></i>
+          </div>
+          <div class="sale-meta-info">
+            <span class="sale-meta-label">Tipo de venta</span>
+            <span class="sale-meta-value" id="drawerSaleType">-</span>
+            <span class="sale-meta-sub" id="drawerPaymentStatusText">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">
+        <i data-lucide="package"></i> Productos vendidos
+      </div>
+      <div class="products-table-wrapper">
+        <table class="products-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th style="width: 12%; text-align: center">Cantidad</th>
+              <th style="width: 18%">Precio aplicado</th>
+              <th style="width: 18%; text-align: right">Subtotal</th>
+              <th style="width: 16%">Lote</th>
+            </tr>
+          </thead>
+          <tbody id="drawerProductsTableBody"></tbody>
+        </table>
+        <div class="products-summary">
+          <div class="summary-item">
+            <span class="summary-label" id="drawerProductsCount">Total productos: 0</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label" id="drawerUnitsCount">Total unidades: 0</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label" id="drawerProductsSubtotal">Subtotal: C$0.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">
+        <i data-lucide="wallet"></i> Pagos relacionados
+      </div>
+      <div id="drawerPaymentsList"></div>
+    </div>
+  </div>
+
+  <div class="sale-drawer-footer">
+    <button class="drawer-btn drawer-btn-secondary" type="button" id="saleDrawerFooterCloseBtn">
+      Cerrar
+    </button>
+    <div class="drawer-btn-spacer"></div>
+    <button class="drawer-btn drawer-btn-primary" type="button" onclick="window.print()">
+      <i data-lucide="printer"></i> Imprimir
+    </button>
+  </div>
+</div>

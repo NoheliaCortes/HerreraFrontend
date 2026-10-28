@@ -1,0 +1,192 @@
+.main-content {
+    margin-left: 240px;
+    margin-top: 60px;
+    min-height: calc(100vh - 60px);
+    padding: 14px 18px 18px;
+    background-color: #F5F6F8;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 0;
+}
+
+.page-header {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+.powerbi-panel {
+    flex: 1;
+    min-height: 0;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+}
+
+.panel-header {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.panel-description {
+    margin: 4px 0 0;
+    color: var(--color-text-hint);
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.btn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-brand);
+    text-decoration: none;
+    transition: gap 0.2s;
+}
+
+.btn-link svg {
+    width: 12px;
+    height: 12px;
+}
+
+.btn-link:hover {
+    gap: 7px;
+}
+
+.powerbi-open-link {
+    flex-shrink: 0;
+    padding-top: 2px;
+}
+
+.powerbi-frame-wrapper {
+    flex: 1;
+    min-height: 640px;
+    width: 100%;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #F8F9FA;
+}
+
+.powerbi-frame {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 640px;
+    border: 0;
+}
+
+.powerbi-fallback {
+    flex-shrink: 0;
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.powerbi-fallback a {
+    color: var(--color-brand);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.powerbi-fallback a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 14px;
+    }
+
+    .powerbi-frame-wrapper,
+    .powerbi-frame {
+        min-height: 560px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .page-header {
+        align-items: stretch;
+    }
+
+    .powerbi-panel {
+        padding: 12px;
+        border-radius: 14px;
+    }
+
+    .panel-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .powerbi-open-link {
+        align-self: flex-start;
+    }
+
+    .powerbi-frame-wrapper,
+    .powerbi-frame {
+        min-height: 480px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 10px;
+    }
+
+    .page-title {
+        font-size: 20px;
+    }
+
+    .powerbi-panel {
+        padding: 10px;
+        border-radius: 12px;
+    }
+
+    .powerbi-frame-wrapper {
+        border-radius: 10px;
+    }
+
+    .powerbi-frame-wrapper,
+    .powerbi-frame {
+        min-height: 420px;
+    }
+}

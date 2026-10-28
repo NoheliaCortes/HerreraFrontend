@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sabores | Sorbetería Herrera</title>
+
+    <link rel="stylesheet" href="../../styles/variables.css" />
+    <link rel="stylesheet" href="../../styles/reset.css" />
+    <link rel="stylesheet" href="../../styles/global.css" />
+    <link rel="stylesheet" href="../../styles/layout.css" />
+    <link rel="stylesheet" href="../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../shared/components/topbar/topbar.css" />
+    <link
+      rel="stylesheet"
+      href="../shared/components/filter-bar/filter-bar.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../shared/components/stat-card/stat-card.css"
+    />
+    <link rel="stylesheet" href="../shared/components/buttons/buttons.css" />
+    <link rel="stylesheet" href="flavors.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  </head>
+
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../shared/components/sidebar/sidebar.js"></script>
+
+    <div id="topbar-placeholder"></div>
+    <script src="../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content flavors-page">
+      <div class="page-header animate-in">
+        <div class="page-header-left">
+          <h1>Catálogo de sabores</h1>
+          <p class="page-subtitle">
+            Gestiona todos los sabores disponibles en tu catálogo
+          </p>
+        </div>
+
+        <div class="page-header-actions">
+          <button
+            class="btn btn-primary"
+            type="button"
+            onclick="openCreateFlavorModal()"
+          >
+            <i data-lucide="plus"></i>
+            <span class="btn-label">Nuevo sabor</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-row flavors-stats-row">
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="ice-cream-bowl"></i>
+          </div>
+          <div class="stat-card-label">Total sabores</div>
+          <div class="stat-card-value" id="stat-total">0</div>
+        </div>
+
+        <div class="stat-card stat-card-purple">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="check-circle"></i>
+          </div>
+          <div class="stat-card-label">Sabores activos</div>
+          <div class="stat-card-value" id="stat-active">0</div>
+        </div>
+
+        <div class="stat-card stat-card-yellow">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="x-circle"></i>
+          </div>
+          <div class="stat-card-label">Inactivos</div>
+          <div class="stat-card-value" id="stat-inactive">0</div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-field filter-search">
+          <label class="filter-label">Buscar</label>
+          <div class="filter-input-wrapper">
+            <input
+              type="text"
+              id="search-flavor"
+              class="filter-input"
+              placeholder="Buscar sabor..."
+            />
+            <i data-lucide="search" class="filter-icon"></i>
+          </div>
+        </div>
+
+        <div class="filter-divider"></div>
+
+        <div class="filter-field">
+          <label class="filter-label">Estado</label>
+          <select id="filter-status" class="filter-select">
+            <option value="">Todos</option>
+            <option value="true">Activo</option>
+            <option value="false">Inactivo</option>
+          </select>
+        </div>
+
+        <div class="filter-divider"></div>
+
+        <div class="filter-actions">
+          <button class="filter-btn filter-btn--clear" id="btn-clear-filters">
+            Limpiar
+          </button>
+          <button class="filter-btn filter-btn--primary" id="btn-search">
+            Buscar
+          </button>
+        </div>
+      </div>
+
+      <div class="results-header">
+        <h2>
+          <span>Sabores</span>
+          <span class="count-badge" id="results-count">0</span>
+        </h2>
+      </div>
+
+      <div class="products-grid" id="flavors-grid"></div>
+
+      <div class="table-footer flavors-table-footer">
+        <div class="table-footer-info" id="pagination-info-text">
+          Cargando información...
+        </div>
+
+        <div class="flavors-pagination" id="flavors-pagination">
+          <button
+            class="pagination-arrow"
+            id="btn-prev-page"
+            type="button"
+            aria-label="Página anterior"
+          >
+            <i data-lucide="chevron-left"></i>
+          </button>
+
+          <div class="pagination-numbers" id="pagination-numbers"></div>
+
+          <button
+            class="pagination-arrow"
+            id="btn-next-page"
+            type="button"
+            aria-label="Página siguiente"
+          >
+            <i data-lucide="chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <div class="flavor-modal-overlay" id="detailFlavorModal">
+      <div class="flavor-modal">
+        <div class="flavor-modal-header">
+          <h2 class="flavor-modal-title">Detalle del sabor</h2>
+          <button
+            class="flavor-modal-close"
+            type="button"
+            onclick="closeDetailFlavorModal()"
+          >
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="flavor-modal-hero">
+          <div class="flavor-modal-hero-image">
+            <img
+              id="detail-image"
+              src="../../../assets/img/placeholder.png"
+              alt="Sabor"
+            />
+          </div>
+
+          <div class="flavor-modal-hero-info">
+            <div class="flavor-modal-hero-top">
+              <h3 id="detail-name">Cargando...</h3>
+              <span id="detail-status" class="flavor-status-badge active">
+                Activo
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flavor-modal-body">
+          <div class="flavor-info-card">
+            <h4>Información general</h4>
+
+            <div class="flavor-info-grid flavor-info-grid-single">
+              <div class="flavor-info-column">
+                <div class="flavor-info-item">
+                  <span class="info-label">Color referencial</span>
+                  <span class="info-value color-value">
+                    <span class="color-dot" id="detail-color-dot"></span>
+                    <span id="detail-color-text">#000000</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flavor-modal-footer">
+          <button
+            class="btn btn-outline"
+            type="button"
+            id="btn-edit-detail-flavor"
+          >
+            <i data-lucide="square-pen"></i>
+            <span class="btn-label">Editar</span>
+          </button>
+
+          <button
+            class="btn btn-danger"
+            type="button"
+            id="btn-delete-detail-flavor"
+          >
+            <i data-lucide="trash-2"></i>
+            <span class="btn-label">Eliminar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="flavor-modal-overlay" id="createFlavorModal">
+      <div class="create-flavor-modal">
+        <div class="create-flavor-header">
+          <div class="create-flavor-header-left">
+            <div class="create-flavor-icon">
+              <i data-lucide="cherry"></i>
+            </div>
+            <div>
+              <h2 id="create-modal-title">Nuevo sabor</h2>
+              <p id="create-modal-subtitle">Completa los datos del sabor</p>
+            </div>
+          </div>
+
+          <button
+            class="create-flavor-close"
+            type="button"
+            onclick="closeCreateFlavorModal()"
+          >
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="create-flavor-body">
+          <div class="create-flavor-grid">
+            <input type="hidden" id="flavor-id" />
+            <input type="hidden" id="flavor-is-active" value="true" />
+
+            <div class="create-flavor-field create-flavor-field-full">
+              <label class="create-flavor-label">
+                <i data-lucide="type"></i>
+                Nombre del sabor
+                <span>*</span>
+              </label>
+              <input
+                type="text"
+                id="flavor-name"
+                class="create-flavor-input"
+                placeholder="Ej. Fresa"
+                maxlength="100"
+              />
+            </div>
+
+            <div class="create-flavor-field">
+              <label class="create-flavor-label">
+                <i data-lucide="palette"></i>
+                Color referencial
+              </label>
+              <input
+                type="color"
+                id="flavor-color"
+                class="create-flavor-input flavor-color-input"
+                value="#FF6B6B"
+              />
+            </div>
+
+            <div class="create-flavor-field">
+              <label class="create-flavor-label">
+                <i data-lucide="hash"></i>
+                Código hexadecimal
+              </label>
+              <input
+                type="text"
+                id="flavor-color-text"
+                class="create-flavor-input"
+                placeholder="#FF6B6B"
+                maxlength="7"
+              />
+            </div>
+
+            <div class="create-flavor-field create-flavor-field-full">
+              <label class="create-flavor-label">
+                <i data-lucide="badge-check"></i>
+                Estado
+              </label>
+
+              <div class="create-flavor-status">
+                <button
+                  class="status-chip active"
+                  id="btn-status-active"
+                  type="button"
+                  onclick="toggleStatusUI(true)"
+                >
+                  Activo
+                </button>
+
+                <button
+                  class="status-chip"
+                  id="btn-status-inactive"
+                  type="button"
+                  onclick="toggleStatusUI(false)"
+                >
+                  Inactivo
+                </button>
+              </div>
+            </div>
+
+            <div class="create-flavor-field create-flavor-field-full">
+              <label class="create-flavor-label">
+                <i data-lucide="image-up"></i>
+                Imagen del sabor
+              </label>
+
+              <div
+                class="create-flavor-upload"
+                id="flavor-image-preview-wrapper"
+              >
+                <input
+                  type="file"
+                  id="flavor-image-input"
+                  accept="image/png, image/jpeg"
+                  hidden
+                />
+                <div class="create-flavor-upload-icon">
+                  <i data-lucide="image-plus"></i>
+                </div>
+                <p class="upload-title">Subir imagen del sabor</p>
+                <p class="upload-subtitle">PNG, JPG · Máx. 2 MB</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="create-flavor-footer">
+          <button
+            class="btn btn-outline"
+            type="button"
+            onclick="closeCreateFlavorModal()"
+          >
+            Cancelar
+          </button>
+
+          <button class="btn btn-primary" type="button" id="btn-save-flavor">
+            <i data-lucide="save"></i>
+            <span class="btn-label">Guardar sabor</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/modules/flavors/flavors.js"></script>
+  </body>
+</html>

@@ -1,0 +1,95 @@
+<div class="inventory-movement-modal-preview" id="inventoryMovementModalPreview">
+  <div class="inventory-movement-modal">
+    <div class="inventory-movement-modal-header">
+      <div>
+        <div class="inventory-movement-modal-eyebrow" id="movementModalEyebrow">Movimiento manual</div>
+        <h2 id="movementModalTitle">Registrar transferencia</h2>
+        <p id="movementModalSubtitle">Completa los datos para registrar el movimiento.</p>
+      </div>
+      <button class="inventory-movement-modal-close" id="movementModalCloseBtn" type="button" aria-label="Cerrar">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <form class="inventory-movement-form" id="inventoryMovementForm" novalidate>
+      <div class="inventory-movement-modal-body">
+        <div class="inventory-movement-form-grid">
+          <label class="form-field form-field--wide">
+            <span>Producto</span>
+            <select id="movementProduct" required>
+              <option value="">Cargando productos...</option>
+            </select>
+          </label>
+
+          <label class="form-field form-field--wide">
+            <span>Lote</span>
+            <select id="movementBatch" required disabled>
+              <option value="">Selecciona un producto primero</option>
+            </select>
+          </label>
+
+          <label class="form-field" id="movementSourceField">
+            <span>Ubicacion origen</span>
+            <select id="movementSourceLocation">
+              <option value="">Selecciona origen</option>
+            </select>
+          </label>
+
+          <label class="form-field" id="movementDestinationField">
+            <span>Ubicacion destino</span>
+            <select id="movementDestinationLocation">
+              <option value="">Selecciona destino</option>
+            </select>
+          </label>
+
+          <label class="form-field" id="movementLocationField" hidden>
+            <span id="movementLocationLabel">Ubicacion afectada</span>
+            <select id="movementLocation">
+              <option value="">Selecciona ubicacion</option>
+            </select>
+          </label>
+
+          <label class="form-field">
+            <span>Cantidad</span>
+            <input type="number" id="movementQuantity" min="1" step="1" placeholder="0" required />
+          </label>
+
+          <label class="form-field form-field--wide">
+            <span>Notas</span>
+            <textarea id="movementNotes" rows="3" placeholder="Notas opcionales para auditoria"></textarea>
+          </label>
+        </div>
+
+        <div class="movement-batch-summary" id="movementBatchSummary" hidden>
+          <div class="movement-batch-summary-item">
+            <span>Stock bodega</span>
+            <strong id="movementStockWarehouse">0</strong>
+          </div>
+          <div class="movement-batch-summary-item">
+            <span>Stock mostrador</span>
+            <strong id="movementStockDisplay">0</strong>
+          </div>
+          <div class="movement-batch-summary-item">
+            <span>Stock reservado</span>
+            <strong id="movementStockReserved">0</strong>
+          </div>
+          <div class="movement-batch-summary-item">
+            <span>Stock total</span>
+            <strong id="movementStockTotal">0</strong>
+          </div>
+        </div>
+
+        <div class="movement-modal-message" id="movementModalMessage" hidden></div>
+      </div>
+
+      <div class="inventory-movement-modal-footer">
+        <button class="drawer-btn drawer-btn-secondary" type="button" id="movementModalCancelBtn">Cancelar</button>
+        <div class="drawer-btn-spacer"></div>
+        <button class="drawer-btn drawer-btn-primary" type="submit" id="movementModalSubmitBtn">
+          <i data-lucide="check-circle"></i>
+          Registrar transferencia
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* --- HEADER ESTANDARIZADO --- */
+.page-header {
+  display: flex;
+  align-items: center; 
+  justify-content: space-between;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+/* Animación suave de entrada */
+.animate-in {
+  animation: fadeSlideIn 0.35s ease forwards;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- TÍTULOS UNIFICADOS --- */
+.page-header-left h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-text-heading, #111827);
+  margin: 0;
+  line-height: 1.2;
+}
+.page-subtitle{
+  font-size: 14px;
+  color: #667085;
+}
+/* --- ACCIONES (BOTONES) --- */
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px; 
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+}

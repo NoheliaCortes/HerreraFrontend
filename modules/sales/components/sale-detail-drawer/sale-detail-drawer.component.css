@@ -1,0 +1,26 @@
+@import url("../../salesDrawer.css");
+
+.sale-drawer-state {
+    padding: 18px;
+    text-align: center;
+    color: var(--color-text-hint);
+    font-weight: 600;
+}
+
+.sale-drawer-state--error {
+    color: #dc2626;
+}
+
+.sale-drawer-status.is-pending {
+    background: rgba(244, 197, 66, 0.15);
+    color: #b8930a;
+}
+
+.sale-drawer-status.is-empty {
+    background: #f1f5f9;
+    color: var(--color-text-hint);
+}
+
+.payment-card:last-child {
+    margin-bottom: 0;
+}

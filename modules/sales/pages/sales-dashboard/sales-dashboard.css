@@ -1,0 +1,46 @@
+@import url("../../salesDashboard/salesDashboard.css");
+
+.table-empty,
+.table-loading {
+    padding: 28px 16px;
+    text-align: center;
+    color: var(--color-text-hint, #6B7280);
+    font-weight: 600;
+}
+
+.table-empty {
+    display: table-cell;
+}
+
+.table-empty i {
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.table-empty--error {
+    color: #dc2626;
+}
+
+.sale-type-cell,
+.payment-type-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    background: rgba(0, 194, 150, 0.1);
+    color: var(--color-brand, #00C296);
+}
+
+.payment-type-cell {
+    background: rgba(244, 197, 66, 0.15);
+    color: #b8930a;
+}
+
+.detail-btn {
+    display: inline-flex;
+}

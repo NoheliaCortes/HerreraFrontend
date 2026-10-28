@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Productos - Sorbeteria Herrera</title>
+
+    <link rel="stylesheet" href="../../../styles/variables.css" />
+    <link rel="stylesheet" href="../../../styles/reset.css" />
+    <link rel="stylesheet" href="../../../styles/global.css" />
+    <link rel="stylesheet" href="../../../styles/layout.css" />
+    <link rel="stylesheet" href="../../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../../shared/components/topbar/topbar.css" />
+    <link rel="stylesheet" href="../../shared/components/filter-bar/filter-bar.css" />
+    <link rel="stylesheet" href="../../shared/components/stat-card/stat-card.css" />
+    <link rel="stylesheet" href="../../shared/components/buttons/buttons.css" />
+    <link rel="stylesheet" href="catalog.css" />
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  </head>
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../../shared/components/sidebar/sidebar.js"></script>
+
+    <div id="topbar-placeholder"></div>
+    <script src="../../shared/components/topbar/topbar.js"></script>
+
+    <div id="product-form-modal-placeholder"></div>
+    <div id="product-detail-modal-placeholder"></div>
+
+    <main class="main-content">
+      <div class="page-header animate-in">
+        <div class="page-header-left">
+          <h1>Productos</h1>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-outline" type="button">
+            <i data-lucide="download" style="width: 16px; height: 16px"></i>
+            <span class="btn-label">Exportar</span>
+          </button>
+          <button class="btn btn-primary" type="button" id="btn-new-product">
+            <i data-lucide="plus" style="width: 18px; height: 18px"></i>
+            <span class="btn-label">Nuevo Producto</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon"><i data-lucide="package"></i></div>
+          <div class="stat-card-label">Productos Registrados</div>
+          <div class="stat-card-value" id="stat-total">-</div>
+        </div>
+        <div class="stat-card stat-card-purple">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon"><i data-lucide="check-circle"></i></div>
+          <div class="stat-card-label">Productos Activos</div>
+          <div class="stat-card-value" id="stat-active">-</div>
+        </div>
+        <div class="stat-card stat-card-coral">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon"><i data-lucide="x-circle"></i></div>
+          <div class="stat-card-label">Productos Inactivos</div>
+          <div class="stat-card-value" id="stat-inactive">-</div>
+        </div>
+      </div>
+
+      <div class="quick-actions-bar">
+        <span class="quick-actions-bar-title">Catalogos</span>
+        <button class="quick-action-card lines" type="button">
+          <div class="quick-action-icon"><i data-lucide="ice-cream"></i></div>
+          <div class="quick-action-info">
+            <span class="qa-name">Lineas</span>
+            <span class="qa-desc">Tradicionales, Premium...</span>
+          </div>
+          <div class="quick-action-arrow"><i data-lucide="chevron-right"></i></div>
+        </button>
+        <button class="quick-action-card presentations" type="button">
+          <div class="quick-action-icon"><i data-lucide="container"></i></div>
+          <div class="quick-action-info">
+            <span class="qa-name">Presentaciones</span>
+            <span class="qa-desc">4oz, litro, galon...</span>
+          </div>
+          <div class="quick-action-arrow"><i data-lucide="chevron-right"></i></div>
+        </button>
+        <button class="quick-action-card flavors" type="button">
+          <div class="quick-action-icon"><i data-lucide="cherry"></i></div>
+          <div class="quick-action-info">
+            <span class="qa-name">Sabores</span>
+            <span class="qa-desc">Nueces, fresa, mango...</span>
+          </div>
+          <div class="quick-action-arrow"><i data-lucide="chevron-right"></i></div>
+        </button>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-field filter-search">
+          <label class="filter-label">Buscar</label>
+          <div class="filter-input-wrapper">
+            <input type="text" class="filter-input" placeholder="Buscar por nombre..." id="searchInput" />
+            <i data-lucide="search" class="filter-icon"></i>
+          </div>
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-field">
+          <label class="filter-label">Linea</label>
+          <select class="filter-select" id="filterLine">
+            <option value="">Todas las lineas</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label class="filter-label">Presentacion</label>
+          <select class="filter-select" id="filterPresentation" disabled>
+            <option value="">Todas</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label class="filter-label">Sabor</label>
+          <select class="filter-select" id="filterFlavor">
+            <option value="">Todos los sabores</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label class="filter-label">Estado</label>
+          <select class="filter-select" id="filterStatus">
+            <option value="">Todos</option>
+            <option value="true">Activos</option>
+            <option value="false">Inactivos</option>
+          </select>
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-actions">
+          <button type="button" class="filter-btn filter-btn--clear" onclick="clearFilters()">
+            <i data-lucide="x"></i> Limpiar
+          </button>
+          <button type="button" class="filter-btn filter-btn--primary" onclick="applyFilters()">
+            <i data-lucide="search"></i> Buscar
+          </button>
+        </div>
+      </div>
+
+      <div class="results-header">
+        <h2>
+          <span>Resultados</span>
+          <span class="count-badge" id="resultCount">-</span>
+        </h2>
+      </div>
+
+      <div class="products-grid" id="productsGrid"></div>
+
+      <div class="table-footer">
+        <div class="rows-per-page">
+          <span>Filas por pagina:</span>
+          <select id="rowsPerPage">
+            <option value="12" selected>12</option>
+            <option value="24">24</option>
+            <option value="36">36</option>
+          </select>
+        </div>
+        <div class="table-footer-info">
+          Mostrando <strong id="showingFrom">0-0</strong> de
+          <strong id="showingTotal">0</strong> registros
+        </div>
+        <div class="pagination"></div>
+      </div>
+    </main>
+
+    <script src="../models/product-model.js"></script>
+    <script src="../../core/services/api.service.js"></script>
+    <script src="../services/productcatalog.service.js"></script>
+    <script src="../components/product-card/product-card.js"></script>
+    <script src="../components/product-form-modal/product-form-modal.js"></script>
+    <script src="../components/product-detail-modal/product-detail-modal.js"></script>
+    <script src="./catalog.js"></script>
+  </body>
+</html>

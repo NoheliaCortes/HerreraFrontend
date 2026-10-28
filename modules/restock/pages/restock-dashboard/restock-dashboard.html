@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reabastecimientos</title>
+    <link rel="stylesheet" href="../../../../styles/variables.css" />
+    <link rel="stylesheet" href="../../../../styles/reset.css" />
+    <link rel="stylesheet" href="../../../../styles/global.css" />
+    <link rel="stylesheet" href="../../../../styles/layout.css" />
+
+    <link rel="stylesheet" href="../../../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../../../shared/components/topbar/topbar.css" />
+    <link rel="stylesheet" href="../../../shared/components/filter-bar/filter-bar.css" />
+    <link rel="stylesheet" href="../../../shared/components/stat-card/stat-card.css" />
+    <link rel="stylesheet" href="../../../shared/components/buttons/buttons.css" />
+
+    <link rel="stylesheet" href="./restock-dashboard.css" />
+
+    <link rel="stylesheet" href="../../restockDrawer.css" />
+   
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../../../shared/components/sidebar/sidebar.js"></script>
+
+    <div id="topbar-placeholder"></div>
+    <script src="../../../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content">
+      <div class="page-header animate-in">
+        <div class="page-header-left">
+          <h1>Reabastecimientos</h1>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-outline" type="button">
+            <i data-lucide="download" style="width: 16px; height: 16px"></i>
+            <span class="btn-label">Exportar</span>
+          </button>
+          <a class="btn btn-primary" href="/modules/restock/restock.html">
+            <i data-lucide="plus" style="width: 18px; height: 18px"></i>
+            <span class="btn-label">Reabastecimiento</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="stats-row animate-in delay-1">
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="package-plus" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Reabastecimientos del mes</div>
+          <div class="stat-card-value" id="statRestocksThisMonth">-</div>
+        </div>
+
+        <div class="stat-card stat-card-coral">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="wallet" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Inversión total del mes</div>
+          <div class="stat-card-value" id="statInvestmentThisMonth">-</div>
+        </div>
+
+        <div class="stat-card stat-card-purple">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="boxes" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Lotes creados del mes</div>
+          <div class="stat-card-value" id="statBatchesThisMonth">-</div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-field filter-search">
+          <label class="filter-label">Buscar</label>
+          <div class="filter-input-wrapper">
+            <input
+              type="text"
+              class="filter-input"
+              placeholder="Buscar por código, usuario..."
+              id="searchInput"
+            />
+            <i data-lucide="search" class="filter-icon"></i>
+          </div>
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-field">
+          <label class="filter-label">Desde</label>
+          <input type="date" class="filter-input" id="dateFrom" />
+        </div>
+        <div class="filter-field">
+          <label class="filter-label">Hasta</label>
+          <input type="date" class="filter-input" id="dateTo" />
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-actions">
+          <button type="button" class="filter-btn filter-btn--clear" id="btnClearFilters">
+            <i data-lucide="x"></i> Limpiar
+          </button>
+          <button type="button" class="filter-btn filter-btn--primary" id="btnApplyFilters">
+            <i data-lucide="search"></i> Buscar
+          </button>
+        </div>
+      </div>
+
+      <div class="results-card animate-in delay-3">
+        <div class="results-header">
+          <h2>
+            <span>Resultados</span>
+            <span class="count-badge" id="resultCount">27</span>
+          </h2>
+          <div class="results-actions">
+            <button class="btn btn-outline" type="button">
+              <i
+                data-lucide="arrow-down-up"
+                style="width: 14px; height: 14px"
+              ></i>
+              Ordenar
+            </button>
+            <button class="btn btn-outline" type="button">
+              <i data-lucide="filter" style="width: 14px; height: 14px"></i>
+              Filtros
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 12%">Código</th>
+                <th style="width: 16%">Fecha</th>
+                <th style="width: 18%">Usuario</th>
+                <th style="width: 10%; text-align: center">Lotes</th>
+                <th style="width: 12%; text-align: center">Unidades totales</th>
+                <th style="width: 16%; text-align: right">Total Invertido</th>
+                <th style="width: 16%; text-align: center">Detalles</th>
+              </tr>
+            </thead>
+            <tbody id="reabastecimientoTableBody">
+              <tr>
+                <td><span class="code-cell">#RBT-027</span></td>
+                <td>
+                  <div class="date-cell">
+                    <span class="date-main">02/03/2025</span>
+                    <span class="date-time">3:45 PM</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar bg-1">NC</div>
+                    <span class="user-name">Nohelia Cortes</span>
+                  </div>
+                </td>
+                <td style="text-align: center">
+                  <span class="lots-cell high">8</span>
+                </td>
+                <td style="text-align: center">
+                  <span class="total-units-cell">100</span>
+                </td>
+                <td style="text-align: right">
+                  <span class="total-cell">C$10,000</span>
+                </td>
+                <td style="text-align: center">
+                  <button
+                    class="btn-detail"
+                    onclick="openRestockDrawer()"
+                    type="button"
+                    aria-label="Ver detalle"
+                  >
+                    <i data-lucide="eye"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="code-cell">#RBT-026</span></td>
+                <td>
+                  <div class="date-cell">
+                    <span class="date-main">02/03/2025</span>
+                    <span class="date-time">2:15 PM</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar bg-1">NC</div>
+                    <span class="user-name">Nohelia Cortes</span>
+                  </div>
+                </td>
+                <td style="text-align: center">
+                  <span class="lots-cell high">10</span>
+                </td>
+                <td style="text-align: center">
+                  <span class="total-units-cell">135</span>
+                </td>
+                <td style="text-align: right">
+                  <span class="total-cell">C$13,520</span>
+                </td>
+                <td style="text-align: center">
+                  <button
+                    class="btn-detail"
+                    onclick="openRestockDrawer()"
+                    type="button"
+                    aria-label="Ver detalle"
+                  >
+                    <i data-lucide="eye"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="code-cell">#RBT-025</span></td>
+                <td>
+                  <div class="date-cell">
+                    <span class="date-main">01/03/2025</span>
+                    <span class="date-time">10:30 AM</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar bg-2">RN</div>
+                    <span class="user-name">Ronald Narvaez</span>
+                  </div>
+                </td>
+                <td style="text-align: center">
+                  <span class="lots-cell medium">5</span>
+                </td>
+                <td style="text-align: center">
+                  <span class="total-units-cell">100</span>
+                </td>
+                <td style="text-align: right">
+                  <span class="total-cell">C$4,200</span>
+                </td>
+                <td style="text-align: center">
+                  <button
+                    class="btn-detail"
+                    onclick="openRestockDrawer()"
+                    type="button"
+                    aria-label="Ver detalle"
+                  >
+                    <i data-lucide="eye"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="code-cell">#RBT-024</span></td>
+                <td>
+                  <div class="date-cell">
+                    <span class="date-main">01/03/2025</span>
+                    <span class="date-time">9:00 AM</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar bg-3">LM</div>
+                    <span class="user-name">Luis Martinez</span>
+                  </div>
+                </td>
+                <td style="text-align: center">
+                  <span class="lots-cell medium">5</span>
+                </td>
+                <td style="text-align: center">
+                  <span class="total-units-cell">100</span>
+                </td>
+                <td style="text-align: right">
+                  <span class="total-cell">C$4,800</span>
+                </td>
+                <td style="text-align: center">
+                  <button
+                    class="btn-detail"
+                    onclick="openRestockDrawer()"
+                    type="button"
+                    aria-label="Ver detalle"
+                  >
+                    <i data-lucide="eye"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="code-cell">#RBT-023</span></td>
+                <td>
+                  <div class="date-cell">
+                    <span class="date-main">28/02/2025</span>
+                    <span class="date-time">4:20 PM</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar bg-1">NC</div>
+                    <span class="user-name">Nohelia Cortes</span>
+                  </div>
+                </td>
+                <td style="text-align: center">
+                  <span class="lots-cell high">12</span>
+                </td>
+                <td style="text-align: center">
+                  <span class="total-units-cell">150</span>
+                </td>
+                <td style="text-align: right">
+                  <span class="total-cell">C$15,600</span>
+                </td>
+                <td style="text-align: center">
+                  <button
+                    class="btn-detail"
+                    type="button"
+                    aria-label="Ver detalle"
+                  >
+                    <i data-lucide="eye"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="code-cell">#RBT-022</span></td>
+                <td>
+                  <div class="date-cell">
+                    <span class="date-main">28/02/2025</span>
+                    <span class="date-time">11:00 AM</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar bg-4">AG</div>
+                    <span class="user-name">Ana Garcia</span>
+                  </div>
+                </td>
+                <td style="text-align: center">
+                  <span class="lots-cell low">3</span>
+                </td>
+                <td style="text-align: center">
+                  <span class="total-units-cell">100</span>
+                </td>
+                <td style="text-align: right">
+                  <span class="total-cell">C$3,150</span>
+                </td>
+                <td style="text-align: center">
+                  <button
+                    class="btn-detail"
+                    type="button"
+                    aria-label="Ver detalle"
+                  >
+                    <i data-lucide="eye"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="code-cell">#RBT-021</span></td>
+                <td>
+                  <div class="date-cell">
+                    <span class="date-main">27/02/2025</span>
+                    <span class="date-time">3:00 PM</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar bg-2">RN</div>
+                    <span class="user-name">Ronald Narvaez</span>
+                  </div>
+                </td>
+                <td style="text-align: center">
+                  <span class="lots-cell medium">7</span>
+                </td>
+                <td style="text-align: center">
+                  <span class="total-units-cell">100</span>
+                </td>
+                <td style="text-align: right">
+                  <span class="total-cell">C$8,750</span>
+                </td>
+                <td style="text-align: center">
+                  <button
+                    class="btn-detail"
+                    onclick="openRestockDrawer()"
+                    type="button"
+                    aria-label="Ver detalle"
+                  >
+                    <i data-lucide="eye"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="code-cell">#RBT-020</span></td>
+                <td>
+                  <div class="date-cell">
+                    <span class="date-main">27/02/2025</span>
+                    <span class="date-time">10:15 AM</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar bg-3">LM</div>
+                    <span class="user-name">Luis Martinez</span>
+                  </div>
+                </td>
+                <td style="text-align: center">
+                  <span class="lots-cell medium">6</span>
+                </td>
+                <td style="text-align: center">
+                  <span class="total-units-cell">100</span>
+                </td>
+                <td style="text-align: right">
+                  <span class="total-cell">C$6,300</span>
+                </td>
+                <td style="text-align: center">
+                  <button
+                    class="btn-detail"
+                    onclick="openRestockDrawer()"
+                    type="button"
+                    aria-label="Ver detalle"
+                  >
+                    <i data-lucide="eye"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-footer">
+          <div class="rows-per-page">
+            <span>Filas por página:</span>
+            <select id="rowsPerPage">
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <div class="table-footer-info">
+            Mostrando <strong id="showingFrom">1-8</strong> de
+            <strong id="showingTotal">27</strong> registros
+          </div>
+          <div class="pagination">
+            <button class="pagination-btn" type="button">
+              <i data-lucide="chevron-left"></i>
+            </button>
+            <button class="pagination-btn active" type="button">1</button>
+            <button class="pagination-btn" type="button">2</button>
+            <button class="pagination-btn" type="button">3</button>
+            <button class="pagination-btn" type="button">4</button>
+            <button class="pagination-btn" type="button">
+              <i data-lucide="chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ═════ RESTOCK DRAWER HTML ═════ -->
+    <div class="restock-drawer-overlay" id="restockDrawerOverlay"></div>
+    <div class="restock-drawer" id="restockDrawer">
+      <!-- Header -->
+      <div class="restock-drawer-header">
+        <div class="restock-drawer-header-top">
+          <div class="restock-drawer-title">
+            <i data-lucide="package-plus"></i>
+            Detalle del reabastecimiento
+          </div>
+          <button class="restock-drawer-close" id="restockDrawerCloseBtn">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="restock-identity">
+          <div class="restock-identity-left">
+            <div class="restock-identity-icon">
+              <i data-lucide="package-plus"></i>
+            </div>
+            <div>
+              <div class="restock-code" id="drawerRestockCode">-</div>
+              <span class="restock-status">
+                <span class="restock-status-dot"></span>
+                Completado
+              </span>
+            </div>
+          </div>
+          <div class="restock-identity-right">
+            <div class="restock-date">
+              <i data-lucide="calendar"></i>
+              <span id="drawerRestockDate">-</span>
+            </div>
+            <div class="restock-user">
+              <span>Registrado por</span>
+              <div class="restock-user-avatar" id="drawerRestockUserAvatar">-</div>
+              <span class="restock-user-name" id="drawerRestockUser">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary Metrics -->
+        <div class="restock-metrics">
+          <div class="restock-metric purple">
+            <div class="restock-metric-label">Lotes creados</div>
+            <div class="restock-metric-value" id="drawerMetricBatches">-</div>
+          </div>
+          <div class="restock-metric green">
+            <div class="restock-metric-label">Unidades totales</div>
+            <div class="restock-metric-value" id="drawerMetricUnits">-</div>
+          </div>
+          <div class="restock-metric orange">
+            <div class="restock-metric-label">Inversión total</div>
+            <div class="restock-metric-value" id="drawerMetricInvestment">-</div>
+          </div>
+          <div class="restock-metric blue">
+            <div class="restock-metric-label">Productos</div>
+            <div class="restock-metric-value" id="drawerMetricProducts">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="restock-drawer-body">
+        <!-- Información del Reabastecimiento -->
+        <div class="restock-section">
+          <div class="restock-section-title">
+            Información del reabastecimiento
+          </div>
+          <div class="restock-info-grid">
+            <div class="restock-info-item">
+              <span class="restock-info-label">Código interno</span>
+              <span class="restock-info-value mono" id="drawerInfoCode">-</span>
+            </div>
+            <div class="restock-info-item">
+              <span class="restock-info-label">Fecha de ingreso</span>
+              <span class="restock-info-value" id="drawerInfoDate">-</span>
+            </div>
+
+            <div class="restock-info-item">
+              <span class="restock-info-label">Registrado por</span>
+              <span class="restock-info-value" id="drawerInfoUser">-</span>
+            </div>
+            <div class="restock-info-item">
+              <span class="restock-info-label">Total de lotes</span>
+              <span class="restock-info-value" id="drawerInfoBatches">-</span>
+            </div>
+            <div class="restock-info-item">
+              <span class="restock-info-label">Total de unidades</span>
+              <span class="restock-info-value" id="drawerInfoUnits">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lotes Creados -->
+        <div class="restock-section">
+          <div class="restock-section-title">Lotes creados</div>
+          <table class="restock-lots-table">
+            <thead>
+              <tr>
+                <th>Código Lote</th>
+                <th>Producto</th>
+                <th>Estado</th>
+                <th style="text-align: right">Cantidad inicial</th>
+                <th style="text-align: right">Costo Unit.</th>
+                <th style="text-align: right">Costo total</th>
+                <th style="text-align: center">Vencimiento</th>
+              </tr>
+            </thead>
+            <tbody id="drawerLotsTableBody">
+              <tr>
+                <td><span class="restock-lot-code">FR4010426</span></td>
+                <td>
+                  <div class="restock-lot-product">
+                    <span class="restock-lot-dot strawberry"></span>
+                    Fresa 8 Onz
+                  </div>
+                </td>
+                <td><span class="restock-lot-status active">Activo</span></td>
+                <td class="restock-lot-cell-num">100</td>
+                <td class="restock-lot-cell-num">C$30.00</td>
+                <td style="text-align: center">01/04/2025</td>
+                <td class="restock-lot-cell-days mid">30</td>
+              </tr>
+              <tr>
+                <td><span class="restock-lot-code">CH4010427</span></td>
+                <td>
+                  <div class="restock-lot-product">
+                    <span class="restock-lot-dot chocolate"></span>
+                    Chocolate 16 Onz
+                  </div>
+                </td>
+                <td><span class="restock-lot-status active">Activo</span></td>
+                <td class="restock-lot-cell-num">80</td>
+                <td class="restock-lot-cell-num">C$32.00</td>
+                <td style="text-align: center">10/04/2025</td>
+                <td class="restock-lot-cell-days high">39</td>
+              </tr>
+              <tr>
+                <td><span class="restock-lot-code">VA4010428</span></td>
+                <td>
+                  <div class="restock-lot-product">
+                    <span class="restock-lot-dot vanilla"></span>
+                    Vainilla 8 Onz
+                  </div>
+                </td>
+                <td>
+                  <span class="restock-lot-status warning"
+                    >Próximo a vencer</span
+                  >
+                </td>
+                <td class="restock-lot-cell-num">60</td>
+                <td class="restock-lot-cell-num">C$28.00</td>
+                <td style="text-align: center">25/03/2025</td>
+                <td class="restock-lot-cell-days low">13</td>
+              </tr>
+              <tr>
+                <td><span class="restock-lot-code">CO4010429</span></td>
+                <td>
+                  <div class="restock-lot-product">
+                    <span class="restock-lot-dot coconut"></span>
+                    Coco 8 Onz
+                  </div>
+                </td>
+                <td><span class="restock-lot-status active">Activo</span></td>
+                <td class="restock-lot-cell-num">40</td>
+                <td class="restock-lot-cell-num">C$29.00</td>
+                <td style="text-align: center">15/04/2025</td>
+                <td class="restock-lot-cell-days high">44</td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="restock-view-all" type="button">
+            <i data-lucide="boxes"></i>
+            <span id="drawerViewAllLots">Lotes creados (0)</span>
+          </button>
+        </div>
+
+        <!-- Resumen Financiero -->
+        <div class="restock-section">
+          <div class="restock-section-title">Resumen financiero</div>
+          <div class="restock-financial-grid">
+            <div class="restock-financial-card orange">
+              <div class="restock-financial-icon">
+                <i data-lucide="wallet"></i>
+              </div>
+              <div class="restock-financial-info">
+                <span class="restock-financial-label">Inversión total</span>
+                <span class="restock-financial-value" style="color: #fa897b" id="drawerFinancialInvestment">-</span>
+              </div>
+            </div>
+            <div class="restock-financial-card blue">
+              <div class="restock-financial-icon">
+                <i data-lucide="coins"></i>
+              </div>
+              <div class="restock-financial-info">
+                <span class="restock-financial-label"
+                  >Costo promedio unitario</span
+                >
+                <span class="restock-financial-value" style="color: #4a90d9" id="drawerAverageCost">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="restock-drawer-footer">
+        <button
+          class="drawer-btn drawer-btn-secondary"
+          onclick="closeRestockDrawer()"
+        >
+          Cerrar
+        </button>
+        <button class="drawer-btn drawer-btn-secondary">
+          <i data-lucide="file-text"></i> Exportar PDF
+        </button>
+        <button class="drawer-btn drawer-btn-secondary">
+          <i data-lucide="printer"></i> Imprimir
+        </button>
+        <div class="drawer-btn-spacer"></div>
+        <button class="drawer-btn drawer-btn-primary">
+          <i data-lucide="list"></i> Ver movimientos
+        </button>
+      </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      function openRestockDrawer() {
+        document.getElementById("restockDrawerOverlay").classList.add("active");
+        document.getElementById("restockDrawer").classList.add("active");
+        document.body.style.overflow = "hidden";
+        if (typeof lucide !== "undefined") lucide.createIcons();
+      }
+
+      function closeRestockDrawer() {
+        document
+          .getElementById("restockDrawerOverlay")
+          .classList.remove("active");
+        document.getElementById("restockDrawer").classList.remove("active");
+        document.body.style.overflow = "";
+      }
+
+      document
+        .getElementById("restockDrawerOverlay")
+        ?.addEventListener("click", closeRestockDrawer);
+      document
+        .getElementById("restockDrawerCloseBtn")
+        ?.addEventListener("click", closeRestockDrawer);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeRestockDrawer();
+      });
+
+      window.openRestockDrawer = openRestockDrawer;
+      window.closeRestockDrawer = closeRestockDrawer;
+
+      if (typeof lucide !== "undefined") lucide.createIcons();
+    </script>
+    <script src="../../models/restock.model.js"></script>
+    <script src="../../services/restock.service.js"></script>
+    <script src="../../components/restock-detail-drawer/restock-detail-drawer.js"></script>
+    <script src="./restock-dashboard.js"></script>
+  </body>
+</html>

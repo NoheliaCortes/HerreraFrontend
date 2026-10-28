@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Usuarios</title>
+    <script>
+      if (!localStorage.getItem("isLoggedIn")) {
+        window.location.href = "/modules/login/login.html";
+      }
+    </script>
+    <link rel="stylesheet" href="../../styles/variables.css" />
+    <link rel="stylesheet" href="../../styles/reset.css" />
+    <link rel="stylesheet" href="../../styles/global.css" />
+    <link rel="stylesheet" href="../../styles/layout.css" />
+
+    <link rel="stylesheet" href="../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../shared/components/topbar/topbar.css" />
+    <link
+      rel="stylesheet"
+      href="../shared/components/filter-bar/filter-bar.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../shared/components/stat-card/stat-card.css"
+    />
+    <link rel="stylesheet" href="../shared/components/buttons/buttons.css" />
+    <link rel="stylesheet" href="./users.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../shared/components/sidebar/sidebar.js"></script>
+    <div id="topbar-placeholder"></div>
+    <script src="../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content">
+      <div class="page-header animate-in">
+        <div class="page-header-left">
+          <h1>Usuarios</h1>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-outline">
+            <i data-lucide="download" style="width: 16px; height: 16px"></i>
+            <span class="btn-label">Exportar</span>
+          </button>
+          <button
+            class="btn btn-outline"
+            id="btn-manage-roles"
+            onclick="window.location.href = '/modules/roles/roles.html'"
+          >
+            <i data-lucide="user-key" style="width: 18px; height: 18px"></i>
+            <span class="btn-label">Gestionar Roles</span>
+          </button>
+          <button class="btn btn-primary" id="btn-open-modal">
+            <i data-lucide="plus" style="width: 18px; height: 18px"></i>
+            <span class="btn-label">Nuevo usuario</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-row animate-in delay-1">
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon"><i data-lucide="users"></i></div>
+          <div class="stat-card-label">Usuarios Activos</div>
+          <div class="stat-card-value" id="count-active">0</div>
+        </div>
+        <div class="stat-card stat-card-coral">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon"><i data-lucide="user-x"></i></div>
+          <div class="stat-card-label">Usuarios Inactivos</div>
+          <div class="stat-card-value" id="count-inactive">0</div>
+        </div>
+        <div class="stat-card stat-card-yellow">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon"><i data-lucide="shield-check"></i></div>
+          <div class="stat-card-label">Administradores</div>
+          <div class="stat-card-value" id="count-admins">0</div>
+        </div>
+        <div class="stat-card stat-card-purple">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon"><i data-lucide="user-round"></i></div>
+          <div class="stat-card-label">Vendedores</div>
+          <div class="stat-card-value" id="count-sellers">0</div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-field filter-search">
+          <label class="filter-label">Buscar</label>
+          <div class="filter-input-wrapper">
+            <input
+              type="text"
+              class="filter-input"
+              placeholder="Buscar por nombre, correo o usuario..."
+              id="search-input"
+            />
+            <i data-lucide="search" class="filter-icon"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card animate-in delay-3">
+        <div class="table-card-header">
+          <h2>
+            <span>Lista de Usuarios</span>
+            <span class="count-badge" id="users-count">0</span>
+          </h2>
+        </div>
+
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="col-user">Usuario</th>
+                <th class="col-id">Cédula</th>
+                <th class="col-email">Correo</th>
+                <th class="col-role">Rol</th>
+                <th class="col-status">Estado</th>
+                <th class="col-actions">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body"></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div class="table-footer-info" id="table-info-text">
+            Cargando información...
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="modal-overlay" id="modal-user">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Agregar Usuario</h2>
+          <button class="btn-close-modal" id="btn-close-modal">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <form class="modal-form" id="form-user" autocomplete="off">
+          <div class="form-section-label">Datos del usuario</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="first-name">Nombre</label>
+              <input type="text" id="first-name" required />
+            </div>
+            <div class="form-group">
+              <label for="last-name">Apellido</label>
+              <input type="text" id="last-name" required />
+            </div>
+            <div class="form-group">
+              <label for="id-number">Cédula</label>
+              <input
+                type="text"
+                id="id-number"
+                required
+                maxlength="14"
+                pattern="^[0-9]{13}[a-zA-Z]$"
+                title="Debe contener 13 números seguidos de una letra (Ej: 041221006100F)"
+              />
+            </div>
+            <div class="form-group">
+              <label for="email">Correo Electrónico</label>
+              <input
+                type="email"
+                id="email"
+                required
+                pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
+                title="Ingresa un correo válido (Ej: usuario@gmail.com)"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-group">
+              <label for="username">Nombre de usuario</label>
+              <input
+                type="text"
+                id="username"
+                required
+                minlength="3"
+                maxlength="20"
+                pattern="^[a-zA-Z0-9_]+$"
+                title="Solo letras, números y guión bajo. Sin espacios."
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-group">
+              <label for="password">Contraseña</label>
+              <div class="input-password">
+                <input
+                  type="password"
+                  id="password"
+                  required
+                  autocomplete="new-password"
+                />
+                <button type="button" class="btn-toggle-pass">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="role">Rol</label>
+              <select id="role" required>
+                <option value="" disabled selected>Seleccione un rol</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="status">Estado</label>
+              <select id="status" required>
+                <option value="active">Activo</option>
+                <option value="inactive">Inactivo</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" id="btn-cancel">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-submit-modal">
+              <i data-lucide="user-plus"></i> Registrar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-view-user">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 id="view-user-title">Ver Usuario</h2>
+          <button
+            type="button"
+            class="btn-close-modal"
+            id="btn-close-view-modal"
+          >
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <form class="modal-form" id="form-view-user" autocomplete="off">
+          <div class="view-mode" id="view-mode">
+            <div class="user-header">
+              <div class="user-avatar-large" id="view-user-avatar">U</div>
+              <div class="user-header-info">
+                <h3 id="view-full-name">-</h3>
+                <p id="view-username">@username</p>
+              </div>
+            </div>
+            <div class="info-section">
+              <div class="info-item">
+                <span class="info-label">Nombre</span
+                ><span class="info-value" id="view-first-name">-</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Apellido</span
+                ><span class="info-value" id="view-last-name">-</span>
+              </div>
+            </div>
+            <div class="info-section">
+              <div class="info-item">
+                <span class="info-label">Cédula</span
+                ><span class="info-value" id="view-id-number">-</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Correo</span
+                ><span class="info-value" id="view-email">-</span>
+              </div>
+            </div>
+            <div class="info-section">
+              <div class="info-item">
+                <span class="info-label">Rol</span
+                ><span class="info-value info-badge" id="view-role">-</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Estado</span
+                ><span class="info-value info-badge" id="view-status">-</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="edit-mode hidden" id="edit-mode">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="edit-first-name">Nombre</label>
+                <input type="text" id="edit-first-name" required />
+              </div>
+              <div class="form-group">
+                <label for="edit-last-name">Apellido</label>
+                <input type="text" id="edit-last-name" required />
+              </div>
+              <div class="form-group">
+                <label for="edit-id-number">Cédula</label>
+                <input
+                  type="text"
+                  id="edit-id-number"
+                  required
+                  maxlength="14"
+                  pattern="^[0-9]{13}[a-zA-Z]$"
+                  title="Debe contener 13 números seguidos de una letra (Ej: 041221006100F)"
+                />
+              </div>
+              <div class="form-group">
+                <label for="edit-email">Correo</label>
+                <input
+                  type="email"
+                  id="edit-email"
+                  required
+                  pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
+                  title="Ingresa un correo válido (Ej: usuario@gmail.com)"
+                  autocomplete="off"
+                />
+              </div>
+              <div class="form-group">
+                <label for="edit-username">Nombre de Usuario</label>
+                <input
+                  type="text"
+                  id="edit-username"
+                  required
+                  minlength="3"
+                  maxlength="20"
+                  pattern="^[a-zA-Z0-9_]+$"
+                  title="Solo letras, números y guión bajo. Sin espacios."
+                  autocomplete="off"
+                />
+              </div>
+              <div class="form-group">
+                <label for="edit-role">Rol</label>
+                <select id="edit-role" required></select>
+              </div>
+              <div class="form-group full-width">
+                <label for="edit-status">Estado</label>
+                <select id="edit-status" required>
+                  <option value="active">Activo</option>
+                  <option value="inactive">Inactivo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" id="btn-cancel-view">
+              Cerrar
+            </button>
+            <button type="button" class="btn btn-outline" id="btn-edit-toggle">
+              <i data-lucide="edit-2"></i> Editar
+            </button>
+            <button
+              type="button"
+              class="btn-cancel hidden"
+              id="btn-cancel-edit"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn-submit-modal hidden"
+              id="btn-save-user"
+            >
+              <i data-lucide="save"></i> Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-overlay" id="modal-reset-pass">
+      <div class="modal modal-reset">
+        <div class="modal-header">
+          <h2>Resetear Contraseña</h2>
+          <button class="btn-close-modal" id="btn-close-reset-modal">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <form class="modal-form" id="form-reset-pass" autocomplete="off">
+          <div class="form-grid reset-form-grid">
+            <p class="reset-subtitle">
+              Nueva contraseña para: <strong id="reset-user-name"></strong>
+            </p>
+            <div class="form-group full-width">
+              <label for="new-password">Contraseña</label>
+              <input
+                type="text"
+                id="new-password"
+                required
+                autocomplete="off"
+              />
+              <span class="reset-help-text">
+                Mínimo 6 caracteres. Se recomienda combinar letras, números y
+                símbolos.
+              </span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" id="btn-cancel-reset">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-submit-modal">
+              <i data-lucide="key" style="width: 18px; height: 18px"></i>
+              Guardar Clave
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="./users.js"></script>
+  </body>
+</html>

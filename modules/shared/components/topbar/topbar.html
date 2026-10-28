@@ -1,0 +1,158 @@
+<div class="topbar">
+  <button
+    class="topbar-menu-btn"
+    onclick="toggleSidebar()"
+    aria-label="Abrir menú"
+  >
+    <i data-lucide="menu" style="width: 22px; height: 22px"></i>
+  </button>
+  <div class="topbar-right">
+    <div class="topbar-search">
+      <button class="topbar-icon-btn search-trigger">
+        <i data-lucide="search"></i>
+      </button>
+      <input type="text" class="search-input" placeholder="Buscar..." />
+    </div>
+
+    <div class="notif-wrapper">
+      <button class="topbar-icon-btn" id="btn-notifications">
+        <i data-lucide="bell"></i>
+        <span class="badge" id="notif-badge">5</span>
+      </button>
+
+      <div class="notif-dropdown" id="notif-dropdown">
+        <div class="notif-header">
+          <span class="notif-title">Notificaciones</span>
+          <button class="notif-mark-all" id="btn-mark-all">
+            Marcar todas como leídas
+          </button>
+        </div>
+
+        <div class="notif-list" id="notif-list">
+          <div class="notif-item unread">
+            <div class="notif-icon error">
+              <i data-lucide="alert-circle"></i>
+            </div>
+            <div class="notif-content">
+              <p class="notif-text">2 pedidos urgentes sin confirmar</p>
+              <span class="notif-time">Hace 5 minutos</span>
+            </div>
+            <div class="notif-dot"></div>
+          </div>
+
+          <div class="notif-item unread">
+            <div class="notif-icon warning">
+              <i data-lucide="package"></i>
+            </div>
+            <div class="notif-content">
+              <p class="notif-text">
+                Stock crítico: Sorbete Mango (5 unidades)
+              </p>
+              <span class="notif-time">Hace 20 minutos</span>
+            </div>
+            <div class="notif-dot"></div>
+          </div>
+          <div class="notif-item unread">
+            <div class="notif-icon warning">
+              <i data-lucide="package"></i>
+            </div>
+            <div class="notif-content">
+              <p class="notif-text">
+                Stock crítico: Sorbete Mango (5 unidades)
+              </p>
+              <span class="notif-time">Hace 20 minutos</span>
+            </div>
+            <div class="notif-dot"></div>
+          </div>
+          <div class="notif-item unread">
+            <div class="notif-icon warning">
+              <i data-lucide="package"></i>
+            </div>
+            <div class="notif-content">
+              <p class="notif-text">
+                Stock crítico: Sorbete Mango (5 unidades)
+              </p>
+              <span class="notif-time">Hace 20 minutos</span>
+            </div>
+            <div class="notif-dot"></div>
+          </div>
+          <div class="notif-item">
+            <div class="notif-icon success">
+              <i data-lucide="check-circle"></i>
+            </div>
+            <div class="notif-content">
+              <p class="notif-text">Venta #0042 registrada correctamente</p>
+              <span class="notif-time">Hace 1 hora</span>
+            </div>
+          </div>
+          <div class="notif-item unread">
+            <div class="notif-icon error">
+              <i data-lucide="alert-circle"></i>
+            </div>
+            <div class="notif-content">
+              <p class="notif-text">2 pedidos urgentes sin confirmar</p>
+              <span class="notif-time">Hace 5 minutos</span>
+            </div>
+            <div class="notif-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-user" id="btn-open-profile">
+      <div class="topbar-user-avatar" id="topbar-avatar">--</div>
+      <div class="topbar-user-info">
+        <span id="topbar-name">Cargando...</span>
+        <span id="topbar-role">--</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="offcanvas-overlay" id="profile-overlay"></div>
+<div class="offcanvas-panel" id="profile-offcanvas">
+  <div class="offcanvas-header">
+    <h3>Mi Cuenta</h3>
+    <button class="btn-close-offcanvas" id="btn-close-profile">
+      <i data-lucide="x"></i>
+    </button>
+  </div>
+
+  <div class="offcanvas-body">
+    <div class="user-card">
+      <div class="avatar" id="offcanvas-avatar">--</div>
+      <div class="user-details">
+        <h4 class="user-name" id="offcanvas-name">Cargando...</h4>
+        <span class="role-badge" id="offcanvas-role">--</span>
+      </div>
+    </div>
+
+    <div class="menu-group">
+      <span class="menu-label">Gestión</span>
+      <a href="/modules/settings/settings.html#perfil" class="menu-item">
+        <i data-lucide="user"></i>
+        <span class="menu-text">Mi Perfil</span>
+      </a>
+      <a href="/modules/settings/settings.html#sistema" class="menu-item">
+        <i data-lucide="settings"></i>
+        <span class="menu-text">Configuración del Sistema</span>
+      </a>
+    </div>
+
+    <div class="menu-group">
+      <span class="menu-label">Preferencias</span>
+      <div class="menu-item" id="btn-toggle-theme">
+        <i data-lucide="moon"></i>
+        <span class="menu-text">Modo Oscuro</span>
+        <div class="toggle-switch" id="theme-switch"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="offcanvas-footer">
+    <button class="btn-logout-panel">
+      <i data-lucide="log-out"></i>
+      <span>Cerrar Sesión</span>
+    </button>
+  </div>
+</div>

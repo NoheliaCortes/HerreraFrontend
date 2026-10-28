@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reportes</title>
+
+    <link rel="stylesheet" href="../../styles/variables.css" />
+    <link rel="stylesheet" href="../../styles/reset.css" />
+    <link rel="stylesheet" href="../../styles/global.css" />
+    <link rel="stylesheet" href="../../styles/layout.css" />
+
+    <link rel="stylesheet" href="../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../shared/components/topbar/topbar.css" />
+    <link rel="stylesheet" href="../shared/components/filter-bar/filter-bar.css" />
+    <link rel="stylesheet" href="../shared/components/stat-card/stat-card.css" />
+    <link rel="stylesheet" href="../shared/components/buttons/buttons.css" />
+    <link rel="stylesheet" href="/modules/reports/reports.css" />
+   
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../shared/components/sidebar/sidebar.js"></script>
+
+    <div id="topbar-placeholder"></div>
+    <script src="../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content">
+      <div class="page-header">
+        <div class="header-title">
+          <h1>Reportes de Rendimiento</h1>
+          <p>
+            Analiza el estado de las ventas, productos y crecimiento del
+            negocio.
+          </p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline" onclick="exportarExcel()">
+            <i data-lucide="download" style="width: 16px; height: 16px"></i>
+            <span class="btn-label">Exportar a Excel</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="filters-bar">
+        <div class="filter-group">
+          <div class="filter-item">
+            <label>Rango:</label>
+            <select
+              class="filter-input"
+              id="dateRange"
+              onchange="onRangeChange()"
+            >
+              <option value="hoy">Hoy</option>
+              <option value="semana">Últimos 7 días</option>
+              <option value="mes" selected>Este Mes</option>
+              <option value="personalizado">Personalizado...</option>
+            </select>
+          </div>
+          <div class="filter-item" id="customDateGroup">
+            <label>Desde:</label>
+            <input
+              type="date"
+              class="filter-input"
+              id="fechaDesde"
+              value="2026-05-01"
+            />
+            <label>Hasta:</label>
+            <input
+              type="date"
+              class="filter-input"
+              id="fechaHasta"
+              value="2026-05-10"
+            />
+          </div>
+        </div>
+        <div class="filter-group">
+          <button class="btn btn-primary btn-sm" onclick="aplicarFiltros()">
+            <i data-lucide="filter" style="width: 14px; height: 14px"></i>
+            Aplicar Filtros
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-row animate-in delay-1">
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i
+              data-lucide="circle-dollar-sign"
+              style="width: 20px; height: 20px"
+            ></i>
+          </div>
+          <div class="stat-card-label">Ingresos Totales</div>
+          <div class="stat-card-value">C$ 45,230</div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="stat-card stat-card-yellow">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="shopping-bag" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Pedidos Completados</div>
+          <div class="stat-card-value">128</div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="stat-card stat-card-coral">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="receipt" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Promedio por Pedido</div>
+          <div class="stat-card-value">C$ 353</div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="stat-card stat-card-purple">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="award" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Producto Estrella</div>
+          <div class="stat-card-value" style="font-size: 20px">
+            Tradicional Fresa
+          </div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">Ventas del Mes (Ingresos en C$)</h3>
+            <select
+              class="filter-input filter-input-sm"
+              id="chartMode"
+              onchange="actualizarGraficoVentas()"
+            >
+              <option value="diario">Diario</option>
+              <option value="semanal">Semanal</option>
+            </select>
+          </div>
+          <div class="chart-container">
+            <canvas id="ventasChart"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">Ventas por Línea</h3>
+          </div>
+          <div class="chart-container chart-center">
+            <canvas id="lineasChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla Top 5 -->
+      <div class="table-card">
+        <div class="table-header">
+          <h3 class="chart-title">Top 5 Productos Más Vendidos</h3>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Producto / Sabor</th>
+                <th>Línea</th>
+                <th>Presentación</th>
+                <th style="text-align: center">Cant. Vendida</th>
+                <th style="text-align: right">Total Ingresos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="rank-cell">1</td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-img">🍓</div>
+                    <span class="product-name">Sorbete de Fresa</span>
+                  </div>
+                </td>
+                <td><span class="badge bg-tradicional">Tradicional</span></td>
+                <td>1/4 Galón</td>
+                <td style="text-align: center; font-weight: 600">24</td>
+                <td style="text-align: right" class="income-cell">
+                  C$ 3,600.00
+                </td>
+              </tr>
+              <tr>
+                <td class="rank-cell">2</td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-img">🍦</div>
+                    <span class="product-name">Sorbete de Vainilla</span>
+                  </div>
+                </td>
+                <td><span class="badge bg-tradicional">Tradicional</span></td>
+                <td>4 Onzas</td>
+                <td style="text-align: center; font-weight: 600">45</td>
+                <td style="text-align: right" class="income-cell">
+                  C$ 1,575.00
+                </td>
+              </tr>
+              <tr>
+                <td class="rank-cell">3</td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-img">🍇</div>
+                    <span class="product-name">Ron con Pasas</span>
+                  </div>
+                </td>
+                <td><span class="badge bg-tradicional">Tradicional</span></td>
+                <td>4 Onzas</td>
+                <td style="text-align: center; font-weight: 600">38</td>
+                <td style="text-align: right" class="income-cell">
+                  C$ 1,330.00
+                </td>
+              </tr>
+              <tr>
+                <td class="rank-cell">4</td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-img">🍓</div>
+                    <span class="product-name">Fresa Light</span>
+                  </div>
+                </td>
+                <td><span class="badge bg-light">Light</span></td>
+                <td>8 Onzas</td>
+                <td style="text-align: center; font-weight: 600">18</td>
+                <td style="text-align: right" class="income-cell">
+                  C$ 1,260.00
+                </td>
+              </tr>
+              <tr>
+                <td class="rank-cell">5</td>
+                <td>
+                  <div class="product-cell">
+                    <div class="product-img">🥭</div>
+                    <span class="product-name">Mango Tradicional</span>
+                  </div>
+                </td>
+                <td><span class="badge bg-tradicional">Tradicional</span></td>
+                <td>1/2 Galón</td>
+                <td style="text-align: center; font-weight: 600">4</td>
+                <td style="text-align: right" class="income-cell">
+                  C$ 1,000.00
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      lucide.createIcons();
+      Chart.defaults.font.family = "'Inter', sans-serif";
+      Chart.defaults.color = "#667085";
+
+      // --- Datos ---
+      const datosDiarios = {
+        labels: [
+          "1 May",
+          "2 May",
+          "3 May",
+          "4 May",
+          "5 May",
+          "6 May",
+          "7 May",
+          "8 May",
+          "9 May",
+          "10 May",
+        ],
+        data: [3200, 4100, 2800, 5600, 6100, 3900, 4500, 5200, 4800, 5030],
+      };
+      const datosSemanales = {
+        labels: ["Semana 1", "Semana 2", "Semana 3", "Semana 4"],
+        data: [12800, 15600, 9800, 7030],
+      };
+
+      // --- Gráfico de Barras ---
+      const ctxVentas = document.getElementById("ventasChart").getContext("2d");
+      const gradientBrand = ctxVentas.createLinearGradient(0, 0, 0, 300);
+      gradientBrand.addColorStop(0, "#00C296");
+      gradientBrand.addColorStop(1, "#04a598");
+
+      const ventasChart = new Chart(ctxVentas, {
+        type: "bar",
+        data: {
+          labels: datosDiarios.labels,
+          datasets: [
+            {
+              label: "Ingresos (C$)",
+              data: datosDiarios.data,
+              backgroundColor: gradientBrand,
+              borderRadius: 6,
+              maxBarThickness: 40,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: "#101828",
+              padding: 12,
+              displayColors: false,
+              callbacks: {
+                label: (ctx) => "C$ " + ctx.parsed.y.toLocaleString(),
+              },
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: "#EAECF0" },
+              border: { display: false },
+              ticks: { callback: (val) => "C$ " + val.toLocaleString() },
+            },
+            x: {
+              grid: { display: false },
+              border: { display: false },
+            },
+          },
+        },
+      });
+
+      // --- Gráfico de Dona ---
+      const ctxLineas = document.getElementById("lineasChart").getContext("2d");
+      new Chart(ctxLineas, {
+        type: "doughnut",
+        data: {
+          labels: ["Tradicional", "Light", "Nieve"],
+          datasets: [
+            {
+              data: [65, 20, 15],
+              backgroundColor: ["#00C296", "#3B82F6", "#F59E0B"],
+              borderWidth: 0,
+              hoverOffset: 4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "70%",
+          plugins: {
+            legend: {
+              position: "bottom",
+              labels: {
+                padding: 20,
+                usePointStyle: true,
+                pointStyle: "circle",
+              },
+            },
+            tooltip: {
+              backgroundColor: "#101828",
+              padding: 12,
+              callbacks: {
+                label: (ctx) => " " + ctx.label + ": " + ctx.parsed + "%",
+              },
+            },
+          },
+        },
+      });
+
+      function actualizarGraficoVentas() {
+        const modo = document.getElementById("chartMode").value;
+        const datos = modo === "semanal" ? datosSemanales : datosDiarios;
+        ventasChart.data.labels = datos.labels;
+        ventasChart.data.datasets[0].data = datos.data;
+        ventasChart.update();
+      }
+
+      function onRangeChange() {
+        const val = document.getElementById("dateRange").value;
+        document.getElementById("customDateGroup").style.display =
+          val === "personalizado" ? "flex" : "none";
+      }
+
+      function aplicarFiltros() {
+        const rango = document.getElementById("dateRange").value;
+        console.log("Filtro aplicado:", rango);
+      }
+
+      function exportarExcel() {
+        alert("Exportación próximamente disponible.");
+      }
+
+      onRangeChange();
+    </script>
+  </body>
+</html>

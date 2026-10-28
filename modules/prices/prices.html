@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Precios</title>
+
+    <link rel="stylesheet" href="../../styles/variables.css" />
+    <link rel="stylesheet" href="../../styles/reset.css" />
+    <link rel="stylesheet" href="../../styles/global.css" />
+    <link rel="stylesheet" href="../../styles/layout.css" />
+
+    <link rel="stylesheet" href="../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../shared/components/topbar/topbar.css" />
+    <link rel="stylesheet" href="../shared/components/filter-bar/filter-bar.css" />
+    <link rel="stylesheet" href="../shared/components/stat-card/stat-card.css" />
+    <link rel="stylesheet" href="../shared/components/buttons/buttons.css" />
+    <link rel="stylesheet" href="/modules/prices/prices.css" />
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  </head>
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../shared/components/sidebar/sidebar.js"></script>
+
+    <div id="topbar-placeholder"></div>
+    <script src="../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content">
+      <div class="page-header animate-in">
+        <div class="page-header-left">
+          <h1>Precios</h1>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-outline" type="button">
+            <i data-lucide="download" style="width: 16px; height: 16px"></i>
+            <span class="btn-label">Exportar</span>
+          </button>
+          <button class="btn btn-primary" type="button" id="btn-new-general-price">
+            <i data-lucide="edit-3" style="width: 18px; height: 18px"></i>
+            <span class="btn-label">Nuevo precio</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-row animate-in delay-1">
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="tags" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Productos con Precio</div>
+          <div class="stat-card-value" id="stat-products-with-price">-</div>
+        </div>
+
+        <div class="stat-card stat-card-yellow">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="badge-percent" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Precios Especiales Activos</div>
+          <div class="stat-card-value" id="stat-active-special-prices">-</div>
+        </div>
+
+        <div class="stat-card stat-card-coral">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="chart-column" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Promociones por vencer</div>
+          <div class="stat-card-value" id="stat-promotions-expiring">-</div>
+        </div>
+
+        <div class="stat-card stat-card-purple">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="clock-3" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">&Uacute;ltima Actualizaci&oacute;n</div>
+          <div class="stat-card-value" id="stat-last-update">-</div>
+        </div>
+      </div>
+
+      <div class="content-grid animate-in delay-2">
+        <div class="general-prices-card">
+          <div class="section-header">
+            <h2><i data-lucide="tag"></i> Gestionar precios generales</h2>
+          </div>
+
+          <div class="category-tabs" id="line-tabs">
+            <button class="category-tab active" type="button" data-line-id="">Todas</button>
+          </div>
+
+          <div class="table-scroll">
+            <table class="price-table">
+              <thead>
+                <tr>
+                  <th style="width: 25%">Presentaci&oacute;n</th>
+                  <th style="width: 25%; text-align: center">Precio Detalle</th>
+                  <th style="width: 25%; text-align: center">Precio Mayoreo</th>
+                  <th style="width: 15%; text-align: center">Productos</th>
+                  <th style="width: 10%; text-align: center"></th>
+                </tr>
+              </thead>
+              <tbody id="general-prices-body">
+                <tr>
+                  <td colspan="5" class="prices-state-cell">Cargando precios...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="special-prices-card">
+          <div class="special-prices-header">
+            <h2><i data-lucide="sparkles"></i> Precios especiales</h2>
+            <button class="add-special-btn" type="button" disabled title="Endpoint no disponible">
+              <i data-lucide="plus"></i>
+            </button>
+          </div>
+
+          <div class="special-prices-list">
+            <div class="special-price-card card-purple">
+              <div class="special-product-img">
+                <img
+                  src="/assets/ProductsImages/Trad.RonConPasas_4Onzas.png"
+                  alt="Sorbete Ron con Pasas"
+                  style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;"
+                />
+              </div>
+              <div class="special-product-info">
+                <span class="special-product-name">Sorbete tradicional Ron con pasas 4 Oz</span>
+                <span class="special-product-price">C$20</span>
+                <span class="special-product-discount">
+                  <i data-lucide="trending-down" style="width: 12px; height: 12px"></i>
+                  40% Descuento
+                </span>
+                <span class="special-product-date">Inicio: 03/03/25</span>
+              </div>
+            </div>
+
+            <div class="special-price-card card-yellow">
+              <div class="special-product-img">
+                <img
+                  src="/assets/ProductsImages/Trad.Vainilla_4Onzas.png"
+                  alt="Sorbete Vainilla"
+                  style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;"
+                />
+              </div>
+              <div class="special-product-info">
+                <span class="special-product-name">Sorbete tradicional Vainilla 8 Oz</span>
+                <span class="special-product-price">C$50</span>
+                <span class="special-product-discount">
+                  <i data-lucide="heart" style="width: 12px; height: 12px"></i>
+                  Especial Dia de Madres
+                </span>
+                <span class="special-product-date">Inicio: 02/03/25</span>
+              </div>
+            </div>
+
+            <div class="special-price-card card-pink">
+              <div class="special-product-img">
+                <img
+                  src="/assets/ProductsImages/Trad.Fresas_1.4Galon.png"
+                  alt="Sorbete Fresas"
+                  style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;"
+                />
+              </div>
+              <div class="special-product-info">
+                <span class="special-product-name">Sorbete Tradicional Fresa 1/4 Gal</span>
+                <span class="special-product-price">C$85</span>
+                <span class="special-product-discount">
+                  <i data-lucide="tag" style="width: 12px; height: 12px"></i>
+                  15% Descuento
+                </span>
+                <span class="special-product-date">Inicio: 15/03/25</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="editModal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>
+            <i data-lucide="pencil" style="width: 22px; height: 22px; color: var(--color-brand)"></i>
+            Editar Precios
+          </h2>
+          <button class="modal-close" type="button" id="btn-close-edit-modal">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="modal-form-group">
+          <label>L&iacute;nea</label>
+          <select id="editLine"></select>
+        </div>
+
+        <div class="modal-form-group">
+          <label>Presentaci&oacute;n</label>
+          <select id="editPresentation"></select>
+        </div>
+
+        <div class="modal-form-row">
+          <div class="modal-form-group">
+            <label>Precio Detalle</label>
+            <input type="number" id="editPriceDetail" min="0" step="0.01" placeholder="C$0.00" />
+          </div>
+
+          <div class="modal-form-group">
+            <label>Precio Mayoreo</label>
+            <input type="number" id="editPriceWholesale" min="0" step="0.01" placeholder="C$0.00" />
+          </div>
+        </div>
+
+        <div class="modal-form-row">
+          <div class="modal-form-group">
+            <label>Vigente desde</label>
+            <input type="date" id="editValidFrom" />
+          </div>
+
+          <div class="modal-form-group">
+            <label>Vigente hasta</label>
+            <input type="date" id="editValidTo" />
+          </div>
+        </div>
+
+        <div class="modal-helper" id="editModalHelper">
+          El cambio cerrara el precio vigente y creara un nuevo registro historico.
+        </div>
+        <div class="modal-error" id="editModalError"></div>
+
+        <div class="modal-actions">
+          <button class="btn btn-outline" type="button" id="btn-cancel-edit-modal">Cancelar</button>
+          <button class="btn btn-primary" type="button" id="btn-save-price">
+            <i data-lucide="check" style="width: 16px; height: 16px"></i>
+            Guardar cambios
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./models/price-model.js"></script>
+    <script src="./services/prices.service.js"></script>
+    <script src="./prices.js"></script>
+  </body>
+</html>

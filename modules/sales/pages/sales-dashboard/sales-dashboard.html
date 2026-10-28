@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ventas</title>
+
+    <link rel="stylesheet" href="../../../../styles/variables.css" />
+    <link rel="stylesheet" href="../../../../styles/reset.css" />
+    <link rel="stylesheet" href="../../../../styles/global.css" />
+    <link rel="stylesheet" href="../../../../styles/layout.css" />
+
+    <link rel="stylesheet" href="../../../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../../../shared/components/topbar/topbar.css" />
+    <link rel="stylesheet" href="../../../shared/components/filter-bar/filter-bar.css" />
+    <link rel="stylesheet" href="../../../shared/components/stat-card/stat-card.css" />
+    <link rel="stylesheet" href="../../../shared/components/buttons/buttons.css" />
+    <link rel="stylesheet" href="../../components/sale-detail-drawer/sale-detail-drawer.component.css" />
+    <link rel="stylesheet" href="./sales-dashboard.css" />
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../../../shared/components/sidebar/sidebar.js"></script>
+
+    <div id="topbar-placeholder"></div>
+    <script src="../../../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content">
+      <div class="page-header animate-in">
+        <div class="page-header-left">
+          <h1>Reporte de Ventas</h1>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-outline" type="button">
+            <i data-lucide="download" style="width: 16px; height: 16px"></i>
+            <span class="btn-label">Exportar</span>
+          </button>
+          <a class="btn btn-primary" href="/modules/sales/pages/new-sale/new-sale.html">
+            <i data-lucide="plus" style="width: 18px; height: 18px"></i>
+            <span class="btn-label">Nueva venta</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="stats-row animate-in delay-1">
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="shopping-cart" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Ventas este mes</div>
+          <div class="stat-card-value" id="statSalesThisMonth">-</div>
+        </div>
+
+        <div class="stat-card stat-card-coral">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="dollar-sign" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Ingresos totales este mes</div>
+          <div class="stat-card-value" id="statIncomeThisMonth">-</div>
+        </div>
+
+        <div class="stat-card stat-card-purple">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="package" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Productos vendidos este mes</div>
+          <div class="stat-card-value" id="statProductsSoldThisMonth">-</div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-field filter-search">
+          <label class="filter-label">Buscar</label>
+          <div class="filter-input-wrapper">
+            <input type="text" class="filter-input" placeholder="Busqueda local por codigo o cliente" id="searchInput" />
+            <i data-lucide="search" class="filter-icon"></i>
+          </div>
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-field">
+          <label class="filter-label">Desde</label>
+          <input type="date" class="filter-input" id="dateFrom" />
+        </div>
+        <div class="filter-field">
+          <label class="filter-label">Hasta</label>
+          <input type="date" class="filter-input" id="dateTo" />
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-actions">
+          <button type="button" class="filter-btn filter-btn--clear" id="btnClearFilters">
+            <i data-lucide="x"></i> Limpiar
+          </button>
+          <button type="button" class="filter-btn filter-btn--primary" id="btnApplyFilters">
+            <i data-lucide="search"></i> Buscar
+          </button>
+        </div>
+      </div>
+
+      <div class="results-card animate-in delay-3">
+        <div class="results-header">
+          <h2>
+            <span>Resultados</span>
+            <span class="count-badge" id="resultCount">0</span>
+          </h2>
+          <div class="results-actions">
+            <button class="btn btn-outline" type="button">
+              <i data-lucide="arrow-down-up" style="width: 14px; height: 14px"></i>
+              Ordenar
+            </button>
+            <button class="btn btn-outline" type="button">
+              <i data-lucide="filter" style="width: 14px; height: 14px"></i>
+              Filtros
+            </button>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 13%">Codigo</th>
+                <th style="width: 15%">Fecha</th>
+                <th style="width: 20%">Cliente</th>
+                <th style="width: 12%; text-align: center">Tipo venta</th>
+                <th style="width: 12%; text-align: center">Tipo pago</th>
+                <th style="width: 14%; text-align: right">Total</th>
+                <th style="width: 14%; text-align: center">Detalles</th>
+              </tr>
+            </thead>
+            <tbody id="ventasTableBody">
+              <tr>
+                <td colspan="7" class="table-loading">Cargando ventas...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-footer">
+          <div class="rows-per-page">
+            <span>Filas por pagina:</span>
+            <select id="rowsPerPage">
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <div class="table-footer-info">
+            Mostrando <strong id="showingFrom">0</strong> de
+            <strong id="showingTotal">0</strong> registros
+          </div>
+          <div class="pagination"></div>
+        </div>
+      </div>
+    </main>
+
+    <div id="sale-detail-drawer-placeholder"></div>
+
+    <script src="../../models/sale.model.js"></script>
+    <script src="../../services/sales.service.js"></script>
+    <script src="../../components/sale-detail-drawer/sale-detail-drawer.component.js"></script>
+    <script src="./sales-dashboard.js"></script>
+  </body>
+</html>

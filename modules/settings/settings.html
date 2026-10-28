@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configuración</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="../../styles/global.css" />
+    <link rel="stylesheet" href="../../styles/layout.css" />
+    <link rel="stylesheet" href="../../styles/variables.css" />
+    <link rel="stylesheet" href="./settings.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div class="settings-layout">
+      <aside class="settings-sidebar">
+        <div class="settings-sidebar-header">
+          <a href="/modules/dashboard/dashboard.html" class="btn-back">
+            <i data-lucide="chevron-left"></i>
+            Volver al Panel
+          </a>
+          <h2 class="settings-sidebar-title">Ajustes</h2>
+        </div>
+
+        <nav class="settings-menu">
+          <p class="settings-menu-label">Personal</p>
+          <button
+            class="settings-menu-item active"
+            onclick="showTab('perfil', this)"
+            id="btn-tab-perfil"
+          >
+            <span class="nav-icon"><i data-lucide="user-circle"></i></span>
+            Mi Perfil
+          </button>
+
+          <p class="settings-menu-label" id="label-admin">Administración</p>
+          <button
+            class="settings-menu-item"
+            onclick="showTab('negocio', this)"
+            id="btn-tab-negocio"
+          >
+            <span class="nav-icon"><i data-lucide="building-2"></i></span>
+            Datos del Negocio
+          </button>
+
+          <button
+            class="settings-menu-item"
+            onclick="showTab('sistema', this)"
+            id="btn-tab-sistema"
+          >
+            <span class="nav-icon"
+              ><i data-lucide="sliders-horizontal"></i
+            ></span>
+            Preferencias
+          </button>
+        </nav>
+      </aside>
+
+      <main class="settings-main">
+        <div class="settings-topbar">
+          <div class="settings-topbar-info">
+            <h3 id="tab-title">Mi Perfil</h3>
+            <p id="tab-desc">
+              Visualiza tu información personal y nivel de acceso.
+            </p>
+          </div>
+        </div>
+
+        <div class="settings-body">
+          <div class="tab-panel" id="panel-perfil">
+            <section class="settings-card">
+              <div class="settings-card-header">
+                <h4>Información del Usuario</h4>
+                <p>
+                  Esta información identifica tu actividad dentro del sistema.
+                  Si necesitas modificarla, contacta a la administración.
+                </p>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Nombre de Usuario</label>
+                  <input type="text" id="profile-username" readonly />
+                </div>
+                <div class="form-group">
+                  <label>Rol de Usuario</label>
+                  <input type="text" id="profile-role" readonly />
+                </div>
+                <div class="form-group">
+                  <label>Primer Nombre</label>
+                  <input type="text" id="profile-firstname" readonly />
+                </div>
+                <div class="form-group">
+                  <label>Apellido</label>
+                  <input type="text" id="profile-lastname" readonly />
+                </div>
+                <div class="form-group full">
+                  <label>Correo Electrónico</label>
+                  <input type="email" id="profile-email" readonly />
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="tab-panel" id="panel-negocio" style="display: none">
+            <section class="settings-card">
+              <div class="settings-card-header">
+                <h4>Datos del Negocio</h4>
+                <p>
+                  Información legal que aparece en reportes y documentos del
+                  sistema.
+                </p>
+              </div>
+              <div class="avatar-row">
+                <div class="avatar-preview">
+                  <img
+                    src="/assets/img/logo.jpg"
+                    alt="Logo Sorbetería"
+                    id="avatar-img"
+                  />
+                </div>
+                <div class="avatar-actions">
+                  <p class="avatar-hint">JPG o PNG. Máximo 2MB.</p>
+                  <label class="btn-upload" for="avatar-input">
+                    <i data-lucide="upload"></i>
+                    Cambiar Logo
+                  </label>
+                  <input
+                    type="file"
+                    id="avatar-input"
+                    accept="image/*"
+                    hidden
+                  />
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="form-group full">
+                  <label>Nombre Comercial</label>
+                  <input
+                    type="text"
+                    id="business-name"
+                    value="Sorbetería Herrera"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>RUC / NIT</label>
+                  <input type="text" id="business-ruc" value="J0310000000001" />
+                </div>
+                <div class="form-group">
+                  <label>Teléfono Comercial</label>
+                  <input type="text" id="business-phone" value="2255-0000" />
+                </div>
+                <div class="form-group full">
+                  <label>Dirección</label>
+                  <input
+                    type="text"
+                    id="business-address"
+                    placeholder="Ej: Jinotepe, Carazo, Nicaragua"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Correo de Contacto</label>
+                  <input
+                    type="email"
+                    id="business-email"
+                    placeholder="correo@sorbeteriaherrera.com"
+                  />
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button id="btn-save-business" class="btn-save">
+                  <i data-lucide="save"></i>
+                  Guardar Datos del Negocio
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <div class="tab-panel" id="panel-sistema" style="display: none">
+            <section class="settings-card">
+              <div class="settings-card-header">
+                <h4>Apariencia</h4>
+                <p>Elige cómo se ve la interfaz del sistema.</p>
+              </div>
+              <div class="theme-grid">
+                <div class="theme-card" onclick="setTheme(this)">
+                  <div class="theme-icon-wrap"><i data-lucide="sun"></i></div>
+                  <div class="theme-info">
+                    <span class="theme-name">Claro</span>
+                    <i data-lucide="check" class="check-icon"></i>
+                  </div>
+                </div>
+                <div class="theme-card" onclick="setTheme(this)">
+                  <div class="theme-icon-wrap"><i data-lucide="moon"></i></div>
+                  <div class="theme-info">
+                    <span class="theme-name">Oscuro</span>
+                    <i data-lucide="check" class="check-icon"></i>
+                  </div>
+                </div>
+                <div class="theme-card active" onclick="setTheme(this)">
+                  <div class="theme-icon-wrap">
+                    <i data-lucide="monitor"></i>
+                  </div>
+                  <div class="theme-info">
+                    <span class="theme-name">Sistema</span>
+                    <i data-lucide="check" class="check-icon"></i>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="settings-card">
+              <div class="settings-card-header">
+                <h4>Notificaciones</h4>
+                <p>Controla qué alertas quieres recibir dentro del sistema.</p>
+              </div>
+
+              <div class="toggle-item">
+                <div class="toggle-info">
+                  <h5>Pedidos Pendientes</h5>
+                  <p>
+                    Recordatorio de pedidos sin confirmar al iniciar sesión.
+                  </p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="./settings.js"></script>
+  </body>
+</html>

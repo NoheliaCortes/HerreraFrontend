@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Colores */
+  --color-brand: #00C296;
+  --color-brand-hover: #04a598;
+  --color-brand-dark: #1a6b3a;
+
+  --color-bg-page: #F8FAFC;
+  --color-bg-sidebar: #F2F0FF;
+  --color-bg-login: #EFFFFB;
+
+  --color-text-heading: #000000;
+  --color-text-body: #4A4A4A;
+  --color-text-hint: #6b8078;
+
+  --color-error: #FF2121;
+  --color-error-bg: #FFDBD7;
+
+  --color-blob: #48FFAA;
+  --color-coral: #FA897B;
+  --color-lavender: #CCABD8;
+
+  --color-white: #FFFFFF;
+
+  /* Tipografía */
+  --font-primary: 'Inter', sans-serif;
+
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
+  --font-weight-medium: 500;
+  --font-weight-regular: 400;
+
+  /* Radius */
+  --radius-button: 8px;
+  --radius-card: 12px;
+  --radius-pill: 100px;
+
+  /* Espaciado */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* Sombras */
+  --shadow-card: 0 2px 8px rgba(0,0,0,.06);
+  --shadow-sidebar: 2px 0 8px rgba(0,0,0,.05);
+}

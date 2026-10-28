@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pedidos</title>
+    <link rel="stylesheet" href="/modules/order/order.css" />
+    <link rel="stylesheet" href="../../styles/variables.css" />
+    <link rel="stylesheet" href="../../styles/reset.css" />
+    <link rel="stylesheet" href="../../styles/global.css" />
+    <link rel="stylesheet" href="../../styles/layout.css" />
+
+    <link rel="stylesheet" href="../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../shared/components/topbar/topbar.css" />
+    <link rel="stylesheet" href="../shared/components/filter-bar/filter-bar.css" />
+    <link rel="stylesheet" href="../shared/components/stat-card/stat-card.css" />
+    <link rel="stylesheet" href="../shared/components/buttons/buttons.css" />
+    <link rel="stylesheet" href="/modules/order/ordersDrawer.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  </head>
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../shared/components/sidebar/sidebar.js"></script>
+    <div id="topbar-placeholder"></div>
+    <script src="../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content">
+     <div class="page-header animate-in">
+  <div class="page-header-left">
+    <h1>Pedidos</h1>
+  </div>
+  <div class="page-header-actions">
+    <button class="btn btn-outline" type="button">
+      <i data-lucide="download" style="width: 16px; height: 16px"></i>
+      <span class="btn-label">Exportar</span>
+    </button>
+    <button class="btn btn-primary" type="button" onclick="window.location.href = '/modules/order/neworder.html'">
+      <i data-lucide="plus" style="width: 18px; height: 18px"></i>
+      <span class="btn-label">Nuevo Pedido</span>
+    </button>
+  </div>
+</div>
+
+      <!-- Stats Row -->
+      <div class="stats-row animate-in delay-1">
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i
+              data-lucide="shopping-cart"
+              style="width: 20px; height: 20px"
+            ></i>
+          </div>
+          <div class="stat-card-label">Pedidos Hoy</div>
+          <div class="stat-card-value">24</div>
+        </div>
+        <div class="stat-card stat-card-yellow">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i data-lucide="clock-3" style="width: 20px; height: 20px"></i>
+          </div>
+          <div class="stat-card-label">Pedidos Pendientes</div>
+          <div class="stat-card-value">11</div>
+        </div>
+        <div class="stat-card stat-card-coral">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i
+              data-lucide="alert-triangle"
+              style="width: 20px; height: 20px"
+            ></i>
+          </div>
+          <div class="stat-card-label">Pedidos Retrasados</div>
+          <div class="stat-card-value">3</div>
+        </div>
+        <div class="stat-card stat-card-purple">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon">
+            <i
+              data-lucide="package-check"
+              style="width: 20px; height: 20px"
+            ></i>
+          </div>
+          <div class="stat-card-label">Pedidos Entregados</div>
+          <div class="stat-card-value">126</div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+  <div class="filter-field">
+    <label class="filter-label">Desde</label>
+    <input type="date" class="filter-input" id="dateFrom" />
+  </div>
+  <div class="filter-field">
+    <label class="filter-label">Hasta</label>
+    <input type="date" class="filter-input" id="dateTo" />
+  </div>
+  <div class="filter-field">
+    <label class="filter-label">Estado</label>
+    <select class="filter-select" id="statusFilter">
+      <option value="">Todos</option>
+      <option value="pending">Pendiente</option>
+      <option value="processing">En Proceso</option>
+      <option value="delivered">Entregado</option>
+      <option value="cancelled">Cancelado</option>
+    </select>
+  </div>
+  <div class="filter-divider"></div>
+  <div class="filter-field">
+    <label class="filter-label">Departamento</label>
+    <select class="filter-select" id="deptFilter">
+      <option value="">Todos</option>
+      <option value="managua">Managua</option>
+      <option value="carazo">Carazo</option>
+      <option value="esteli">Estelí</option>
+      <option value="matagalpa">Matagalpa</option>
+    </select>
+  </div>
+  <div class="filter-field">
+    <label class="filter-label">Municipio</label>
+    <select class="filter-select" id="municipalityFilter">
+      <option value="">Todos</option>
+      <option value="managua">Managua</option>
+      <option value="tipitapa">Tipitapa</option>
+      <option value="ticuantepe">Ticuantepe</option>
+      <option value="jinotepe">Jinotepe</option>
+    </select>
+  </div>
+  <div class="filter-divider"></div>
+  <div class="filter-field filter-search">
+    <input type="text" class="filter-input" placeholder="Buscar por código o cliente..." id="searchInput" onkeyup="filterResults()" />
+    <i data-lucide="search" class="filter-icon"></i>
+  </div>
+  <div class="filter-actions">
+    <button type="button" class="filter-btn filter-btn--clear" onclick="clearFilters()">
+      <i data-lucide="x"></i> Limpiar
+    </button>
+    <button type="button" class="filter-btn filter-btn--primary" onclick="applyFilters()">
+      <i data-lucide="search"></i> Buscar
+    </button>
+  </div>
+</div>
+
+      <!-- Content Grid -->
+      <div class="content-grid animate-in delay-3">
+        <!-- Results Card -->
+        <div class="results-card">
+          <div class="results-header">
+            <h2>
+              <span>Resultados</span
+              ><span class="count-badge" id="resultCount">48</span>
+            </h2>
+            <div class="results-actions">
+              <button class="btn btn-outline" type="button">
+                <i
+                  data-lucide="arrow-down-up"
+                  style="width: 14px; height: 14px"
+                ></i>
+                Ordenar
+              </button>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 12%">Código</th>
+                  <th style="width: 16%">Fecha de Entrega</th>
+                  <th style="width: 14%; text-align: right">Total</th>
+                  <th style="width: 22%">Cliente</th>
+                  <th style="width: 14%; text-align: center">Estado</th>
+                  <th style="width: 22%; text-align: center">Detalles</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr data-status="processing" data-dept="managua">
+                  <td><span class="code-cell">#PED-100528</span></td>
+                  <td>
+                    <div class="date-cell">
+                      <span class="date-main">02/03/2025</span>
+                    </div>
+                  </td>
+                  <td style="text-align: right">
+                    <span class="total-cell">C$152.00</span>
+                  </td>
+                  <td>
+                    <div class="client-cell">
+                      <div class="client-avatar bg-1">YG</div>
+                      <span class="client-name">Yahir Guevara</span>
+                    </div>
+                  </td>
+                  <td style="text-align: center">
+                    <span class="status-badge status-processing"
+                      >En Proceso</span
+                    >
+                  </td>
+                  <td style="text-align: center">
+                    <button
+                      class="detail-btn"
+                      onclick="openDrawer()"
+                      aria-label="Ver detalle"
+                    >
+                      <i data-lucide="eye"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr data-status="pending" data-dept="managua">
+                  <td><span class="code-cell">#PED-100527</span></td>
+                  <td>
+                    <div class="date-cell">
+                      <span class="date-main">02/03/2025</span>
+                    </div>
+                  </td>
+                  <td style="text-align: right">
+                    <span class="total-cell">C$152.00</span>
+                  </td>
+                  <td>
+                    <div class="client-cell">
+                      <div class="client-avatar bg-2">CM</div>
+                      <span class="client-name">Carlos Mena</span>
+                    </div>
+                  </td>
+                  <td style="text-align: center">
+                    <span class="status-badge status-pending">Pendiente</span>
+                  </td>
+                  <td style="text-align: center">
+                    <button
+                      class="detail-btn"
+                      onclick="openDrawer()"
+                      aria-label="Ver detalle"
+                    >
+                      <i data-lucide="eye"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr data-status="delivered" data-dept="carazo">
+                  <td><span class="code-cell">#PED-100526</span></td>
+                  <td>
+                    <div class="date-cell">
+                      <span class="date-main">02/03/2025</span>
+                    </div>
+                  </td>
+                  <td style="text-align: right">
+                    <span class="total-cell">C$152.00</span>
+                  </td>
+                  <td>
+                    <div class="client-cell">
+                      <div class="client-avatar bg-3">NC</div>
+                      <span class="client-name">Nohelia Cortes</span>
+                    </div>
+                  </td>
+                  <td style="text-align: center">
+                    <span class="status-badge status-delivered">Entregado</span>
+                  </td>
+                  <td style="text-align: center">
+                    <button
+                      class="detail-btn"
+                      onclick="openDrawer()"
+                      aria-label="Ver detalle"
+                    >
+                      <i data-lucide="eye"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr data-status="processing" data-dept="esteli">
+                  <td><span class="code-cell">#PED-100525</span></td>
+                  <td>
+                    <div class="date-cell">
+                      <span class="date-main">02/03/2025</span>
+                    </div>
+                  </td>
+                  <td style="text-align: right">
+                    <span class="total-cell">C$152.00</span>
+                  </td>
+                  <td>
+                    <div class="client-cell">
+                      <div class="client-avatar bg-4">MP</div>
+                      <span class="client-name">Michelle Peña</span>
+                    </div>
+                  </td>
+                  <td style="text-align: center">
+                    <span class="status-badge status-processing"
+                      >En Proceso</span
+                    >
+                  </td>
+                  <td style="text-align: center">
+                    <button
+                      class="detail-btn"
+                      onclick="openDrawer()"
+                      aria-label="Ver detalle"
+                    >
+                      <i data-lucide="eye"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr data-status="pending" data-dept="managua">
+                  <td><span class="code-cell">#PED-100524</span></td>
+                  <td>
+                    <div class="date-cell">
+                      <span class="date-main">02/03/2025</span>
+                    </div>
+                  </td>
+                  <td style="text-align: right">
+                    <span class="total-cell">C$152.00</span>
+                  </td>
+                  <td>
+                    <div class="client-cell">
+                      <div class="client-avatar bg-1">AC</div>
+                      <span class="client-name">Antonio Campos</span>
+                    </div>
+                  </td>
+                  <td style="text-align: center">
+                    <span class="status-badge status-pending">Pendiente</span>
+                  </td>
+                  <td style="text-align: center">
+                    <button
+                      class="detail-btn"
+                      onclick="openDrawer()"
+                      aria-label="Ver detalle"
+                    >
+                      <i data-lucide="eye"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr data-status="delivered" data-dept="matagalpa">
+                  <td><span class="code-cell">#PED-100523</span></td>
+                  <td>
+                    <div class="date-cell">
+                      <span class="date-main">01/03/2025</span>
+                    </div>
+                  </td>
+                  <td style="text-align: right">
+                    <span class="total-cell">C$280.00</span>
+                  </td>
+                  <td>
+                    <div class="client-cell">
+                      <div class="client-avatar bg-2">AL</div>
+                      <span class="client-name">Andres Lopez</span>
+                    </div>
+                  </td>
+                  <td style="text-align: center">
+                    <span class="status-badge status-delivered">Entregado</span>
+                  </td>
+                  <td style="text-align: center">
+                    <button
+                      class="detail-btn"
+                      onclick="openDrawer()"
+                      aria-label="Ver detalle"
+                    >
+                      <i data-lucide="eye"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr data-status="cancelled" data-dept="managua">
+                  <td><span class="code-cell">#PED-100522</span></td>
+                  <td>
+                    <div class="date-cell">
+                      <span class="date-main">01/03/2025</span>
+                    </div>
+                  </td>
+                  <td style="text-align: right">
+                    <span class="total-cell">C$95.00</span>
+                  </td>
+                  <td>
+                    <div class="client-cell">
+                      <div class="client-avatar bg-3">RG</div>
+                      <span class="client-name">Rosa Garcia</span>
+                    </div>
+                  </td>
+                  <td style="text-align: center">
+                    <span class="status-badge status-cancelled">Cancelado</span>
+                  </td>
+                  <td style="text-align: center">
+                    <button
+                      class="detail-btn"
+                      onclick="openDrawer()"
+                      aria-label="Ver detalle"
+                    >
+                      <i data-lucide="eye"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr data-status="processing" data-dept="carazo">
+                  <td><span class="code-cell">#PED-100521</span></td>
+                  <td>
+                    <div class="date-cell">
+                      <span class="date-main">01/03/2025</span>
+                    </div>
+                  </td>
+                  <td style="text-align: right">
+                    <span class="total-cell">C$210.00</span>
+                  </td>
+                  <td>
+                    <div class="client-cell">
+                      <div class="client-avatar bg-4">JT</div>
+                      <span class="client-name">Jose Torres</span>
+                    </div>
+                  </td>
+                  <td style="text-align: center">
+                    <span class="status-badge status-processing"
+                      >En Proceso</span
+                    >
+                  </td>
+                  <td style="text-align: center">
+                    <button
+                      class="detail-btn"
+                      onclick="openDrawer()"
+                      aria-label="Ver detalle"
+                    >
+                      <i data-lucide="eye"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <div class="rows-per-page">
+              <span>Filas:</span>
+              <select>
+                <option value="8" selected>8</option>
+                <option value="15">15</option>
+                <option value="25">25</option>
+              </select>
+            </div>
+            <div class="table-footer-info">
+              Mostrando <strong id="showingFrom">1-8</strong> de
+              <strong id="showingTotal">48</strong> registros
+            </div>
+            <div class="pagination">
+              <button class="pagination-btn" disabled id="prevBtn">
+                <i data-lucide="chevron-left"></i>
+              </button>
+              <button class="pagination-btn active">1</button>
+              <button class="pagination-btn">2</button>
+              <button class="pagination-btn">3</button>
+              <button class="pagination-btn">4</button>
+              <button class="pagination-btn">5</button>
+              <button class="pagination-btn">6</button>
+              <button class="pagination-btn">
+                <i data-lucide="chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="side-panel">
+          <div class="side-card">
+            <div class="side-card-header">
+              <h3>
+                <i
+                  data-lucide="calendar-check"
+                  style="color: var(--color-brand)"
+                ></i>
+                Pedidos para hoy
+              </h3>
+              <span class="view-all">Ver todo</span>
+            </div>
+            <div class="order-card order-card-today">
+              <div class="order-card-icon"><i data-lucide="package"></i></div>
+              <div class="order-card-info">
+                <div class="order-card-code">#PED-100528</div>
+                <div class="order-card-location">Managua, Managua</div>
+                <div class="order-card-user">Marcelo Mena</div>
+              </div>
+              <div class="order-card-actions">
+                <button class="order-action-btn" title="Llamar">
+                  <i data-lucide="phone"></i>
+                </button>
+              </div>
+            </div>
+            <div class="order-card order-card-today">
+              <div class="order-card-icon"><i data-lucide="package"></i></div>
+              <div class="order-card-info">
+                <div class="order-card-code">#PED-100527</div>
+                <div class="order-card-location">Managua, Managua</div>
+                <div class="order-card-user">Marcelo Mena</div>
+              </div>
+              <div class="order-card-actions">
+                <button class="order-action-btn" title="Llamar">
+                  <i data-lucide="phone"></i>
+                </button>
+              </div>
+            </div>
+            <div class="order-card order-card-today">
+              <div class="order-card-icon"><i data-lucide="package"></i></div>
+              <div class="order-card-info">
+                <div class="order-card-code">#PED-100526</div>
+                <div class="order-card-location">Carazo, Jinotepe</div>
+                <div class="order-card-user">Nohelia Cortes</div>
+              </div>
+              <div class="order-card-actions">
+                <button class="order-action-btn" title="Llamar">
+                  <i data-lucide="phone"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="side-card">
+            <div class="side-card-header">
+              <h3>
+                <i
+                  data-lucide="alert-triangle"
+                  style="color: var(--color-coral)"
+                ></i>
+                Pedidos retrasados
+              </h3>
+              <span class="view-all">Ver todo</span>
+            </div>
+            <div class="order-card order-card-delayed">
+              <div class="order-card-icon">
+                <i data-lucide="alert-circle"></i>
+              </div>
+              <div class="order-card-info">
+                <div class="order-card-code">#PED-100529</div>
+                <div class="order-card-location">Managua, Managua</div>
+                <div class="order-card-user">Marcelo Mena</div>
+              </div>
+              <div class="order-card-actions">
+                <button class="order-action-btn" title="Editar">
+                  <i data-lucide="pencil"></i></button
+                ><button class="order-action-btn" title="Llamar">
+                  <i data-lucide="phone"></i>
+                </button>
+              </div>
+            </div>
+            <div class="order-card order-card-delayed">
+              <div class="order-card-icon">
+                <i data-lucide="alert-circle"></i>
+              </div>
+              <div class="order-card-info">
+                <div class="order-card-code">#PED-100526</div>
+                <div class="order-card-location">Managua, Managua</div>
+                <div class="order-card-user">Marcelo Mena</div>
+              </div>
+              <div class="order-card-actions">
+                <button class="order-action-btn" title="Editar">
+                  <i data-lucide="pencil"></i></button
+                ><button class="order-action-btn" title="Llamar">
+                  <i data-lucide="phone"></i>
+                </button>
+              </div>
+            </div>
+            <div class="order-card order-card-delayed">
+              <div class="order-card-icon">
+                <i data-lucide="alert-circle"></i>
+              </div>
+              <div class="order-card-info">
+                <div class="order-card-code">#PED-100528</div>
+                <div class="order-card-location">Managua, Tipitapa</div>
+                <div class="order-card-user">Marcelo Mena</div>
+              </div>
+              <div class="order-card-actions">
+                <button class="order-action-btn" title="Editar">
+                  <i data-lucide="pencil"></i></button
+                ><button class="order-action-btn" title="Llamar">
+                  <i data-lucide="phone"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Drawer Overlay -->
+    <div class="order-drawer-overlay" id="orderDrawerOverlay"></div>
+
+    <!-- Drawer -->
+    <div class="order-drawer" id="orderDrawer">
+      <div class="order-drawer-header">
+        <div class="order-drawer-header-top">
+          <div class="order-drawer-title">
+            <i data-lucide="file-text"></i> Detalle del pedido
+          </div>
+          <button class="order-drawer-close" id="drawerCloseBtn">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="order-drawer-identity">
+          <span class="order-drawer-code">PED-10526</span>
+          <span class="order-drawer-status status-pending"
+            ><span class="status-dot"></span> Pendiente</span
+          >
+        </div>
+      </div>
+
+      <div class="order-drawer-body">
+        <div class="drawer-section">
+          <div class="drawer-section-title">
+            <i data-lucide="info"></i> Información general
+          </div>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Código</span
+              ><span class="info-value mono">PED-10526</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Fecha registro</span
+              ><span class="info-value">02/03/2026 09:15 AM</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Entrega estimada</span
+              ><span class="info-value">02/03/2026 03:00 PM</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Entrega real</span
+              ><span class="info-value">-</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Registrado por</span
+              ><span class="info-value">Nohelia Cortes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <div class="drawer-section-title">
+            <i data-lucide="user"></i> Cliente
+          </div>
+          <div class="client-card">
+            <div class="client-avatar"><span>ML</span></div>
+            <div class="client-info">
+              <span class="client-name">Nombre Cliente</span>
+              <span class="client-point"
+                ><i data-lucide="store"></i> Punto de venta</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <div class="drawer-section-title">
+            <i data-lucide="map-pin"></i> Ubicación
+          </div>
+          <div class="location-card">
+            <div class="location-icon"><i data-lucide="map"></i></div>
+            <div class="location-info">
+              <span class="location-label">Departamento</span>
+              <span class="location-value">Managua</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <div class="drawer-section-title">
+            <i data-lucide="bar-chart-3"></i> Resumen
+          </div>
+          <div class="summary-metrics">
+            <div class="summary-metric">
+              <div class="summary-metric-value">6</div>
+              <div class="summary-metric-label">Productos</div>
+            </div>
+            <div class="summary-metric">
+              <div class="summary-metric-value">24</div>
+              <div class="summary-metric-label">Unidades</div>
+            </div>
+            <div class="summary-metric">
+              <div class="summary-metric-value total-price">C$1,250.00</div>
+              <div class="summary-metric-label">Total</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <div class="drawer-section-title">
+            <i data-lucide="package"></i> Productos
+          </div>
+          <div class="products-table-wrapper">
+            <table class="products-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th style="width: 14%; text-align: center">Cant.</th>
+                  <th style="width: 18%">P. Unit.</th>
+                  <th style="width: 18%">P. Total</th>
+                  <th style="width: 15%">Lote</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="product-cell">
+                      <div>
+                        <div class="product-name">Helado de Vainilla 1L</div>
+                        <div
+                          style="
+                            font-size: 10.5px;
+                            color: var(--color-text-hint);
+                          "
+                        >
+                          PROD-001
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="quantity-cell">6</td>
+                  <td class="price-cell">C$120.00</td>
+                  <td class="price-total-cell">C$720.00</td>
+                  <td>
+                    <span
+                      style="
+                        font-family: monospace;
+                        font-size: 11px;
+                        background: var(--color-bg-page);
+                        padding: 3px 8px;
+                        border-radius: 6px;
+                      "
+                      >L-VA123</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="product-cell">
+                      <div>
+                        <div class="product-name">Helado de Chocolate 1L</div>
+                        <div
+                          style="
+                            font-size: 10.5px;
+                            color: var(--color-text-hint);
+                          "
+                        >
+                          PROD-002
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="quantity-cell">6</td>
+                  <td class="price-cell">C$120.00</td>
+                  <td class="price-total-cell">C$720.00</td>
+                  <td>
+                    <span
+                      style="
+                        font-family: monospace;
+                        font-size: 11px;
+                        background: var(--color-bg-page);
+                        padding: 3px 8px;
+                        border-radius: 6px;
+                      "
+                      >L-CH456</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="product-cell">
+                      <div>
+                        <div class="product-name">Cono Clásico</div>
+                        <div
+                          style="
+                            font-size: 10.5px;
+                            color: var(--color-text-hint);
+                          "
+                        >
+                          PROD-015
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="quantity-cell">12</td>
+                  <td class="price-cell">C$6.00</td>
+                  <td class="price-total-cell">C$72.00</td>
+                  <td>
+                    <span
+                      style="
+                        font-family: monospace;
+                        font-size: 11px;
+                        background: var(--color-bg-page);
+                        padding: 3px 8px;
+                        border-radius: 6px;
+                      "
+                      >L-CO789</span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-drawer-footer">
+        <button class="drawer-btn drawer-btn-secondary" onclick="closeDrawer()">
+          Cerrar
+        </button>
+        <div class="drawer-btn-spacer"></div>
+        <button class="drawer-btn drawer-btn-primary" onclick="window.print()">
+          <i data-lucide="printer"></i> Imprimir
+        </button>
+      </div>
+    </div>
+
+    <script>
+      function openDrawer() {
+        document.getElementById("orderDrawerOverlay").classList.add("active");
+        document.getElementById("orderDrawer").classList.add("active");
+        document.body.style.overflow = "hidden";
+        if (typeof lucide !== "undefined") lucide.createIcons();
+      }
+      function closeDrawer() {
+        document
+          .getElementById("orderDrawerOverlay")
+          .classList.remove("active");
+        document.getElementById("orderDrawer").classList.remove("active");
+        document.body.style.overflow = "";
+      }
+      document
+        .getElementById("orderDrawerOverlay")
+        ?.addEventListener("click", closeDrawer);
+      document
+        .getElementById("drawerCloseBtn")
+        ?.addEventListener("click", closeDrawer);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeDrawer();
+      });
+      window.openDrawer = openDrawer;
+      window.closeDrawer = closeDrawer;
+      if (typeof lucide !== "undefined") lucide.createIcons();
+    </script>
+  </body>
+</html>

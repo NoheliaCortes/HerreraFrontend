@@ -1,0 +1,120 @@
+<!--
+  customer-form-modal.component.html
+  Template del modal para Crear y Editar clientes.
+  Este archivo es inyectado dinámicamente por customer-form-modal.component.js
+  NO se vincula directamente en el HTML de la página.
+-->
+
+<div class="modal-overlay" id="modal-customer-form">
+  <div class="modal">
+
+    <div class="modal-header">
+      <h2 id="modal-form-title">Nuevo Cliente</h2>
+      <button class="btn-close-modal" id="btn-close-customer-form" type="button">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <div class="form-section-label">Datos del cliente</div>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label for="cf-firstName">Nombre</label>
+        <input
+          type="text"
+          id="cf-firstName"
+          placeholder="Ej: Carlos"
+          maxlength="100"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="cf-lastName">Apellido</label>
+        <input
+          type="text"
+          id="cf-lastName"
+          placeholder="Ej: Herrera"
+          maxlength="100"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="cf-phone">Teléfono</label>
+        <input
+          type="text"
+          id="cf-phone"
+          placeholder="Ej: 8888-0000"
+          maxlength="20"
+        />
+      </div>
+
+      <div class="form-group">
+    <label for="cf-departmentId">
+        Departamento
+    </label>
+
+    <select id="cf-departmentId" required>
+        <option value="">
+            Seleccionar departamento
+        </option>
+    </select>
+  </div>
+
+      <div class="form-group">
+        <label for="cf-municipalityId">Municipio</label>
+        <select id="cf-municipalityId" required>
+       <option value="">
+        Seleccionar municipio
+       </option>
+        </select>
+      </div>
+
+      <div class="form-group form-group--full">
+        <label for="cf-pointOfSale">Punto de Venta</label>
+        <input
+          type="text"
+          id="cf-pointOfSale"
+          placeholder="Ej: Distribuidora Central"
+          maxlength="150"
+        />
+      </div>
+
+      <div class="form-group form-group--full">
+        <label for="cf-posaddress">Dirección del Punto de Venta</label>
+        <input
+          type="text"
+          id="cf-posaddress"
+          placeholder="Ej: Del semáforo 2c al norte"
+          maxlength="250"
+        />
+      </div>
+
+      <!-- Campo isActive solo visible en modo edición -->
+      <div class="form-group form-group--full" id="cf-status-group" style="display:none;">
+        <label for="cf-isActive">Estado</label>
+        <select id="cf-isActive">
+          <option value="true">Activo</option>
+          <option value="false">Inactivo</option>
+        </select>
+      </div>
+
+    </div>
+
+    <!-- Mensaje de error de la API -->
+    <div class="form-api-error" id="cf-api-error" style="display:none;"></div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn-cancel" id="btn-cancel-customer-form">
+        Cancelar
+      </button>
+      <button type="button" class="btn-submit-modal" id="btn-submit-customer-form">
+        <i data-lucide="plus" id="btn-submit-icon"></i>
+        <span id="btn-submit-label">Registrar</span>
+      </button>
+    </div>
+
+  </div>
+</div>

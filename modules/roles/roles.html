@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Roles</title>
+    <script>
+      if (!localStorage.getItem("isLoggedIn")) {
+        window.location.href = "/modules/login/login.html";
+      }
+    </script>
+    <link rel="stylesheet" href="../../styles/variables.css" />
+    <link rel="stylesheet" href="../../styles/reset.css" />
+    <link rel="stylesheet" href="../../styles/global.css" />
+    <link rel="stylesheet" href="../../styles/layout.css" />
+
+    <link rel="stylesheet" href="../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../shared/components/topbar/topbar.css" />
+    <link
+      rel="stylesheet"
+      href="../shared/components/filter-bar/filter-bar.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../shared/components/stat-card/stat-card.css"
+    />
+    <link rel="stylesheet" href="../shared/components/buttons/buttons.css" />
+
+    <link rel="stylesheet" href="../users/users.css" />
+    <link rel="stylesheet" href="./roles.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../shared/components/sidebar/sidebar.js"></script>
+    <div id="topbar-placeholder"></div>
+    <script src="../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content">
+      <div class="page-header animate-in">
+        <div class="page-header-left">
+          <button
+            class="btn btn-outline"
+            style="margin-right: 15px; border: none"
+            onclick="window.location.href = '/modules/users/users.html'"
+          >
+            <i data-lucide="arrow-left" style="width: 20px; height: 20px"></i>
+          </button>
+          <h1>Gestión de Roles</h1>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-primary" id="btn-open-modal">
+            <i data-lucide="plus" style="width: 18px; height: 18px"></i>
+            <span class="btn-label">Nuevo Rol</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-row animate-in delay-1">
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon"><i data-lucide="shield"></i></div>
+          <div class="stat-card-label">Total Roles</div>
+          <div class="stat-card-value" id="count-total">0</div>
+        </div>
+        <div class="stat-card stat-card-yellow">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon"><i data-lucide="shield-check"></i></div>
+          <div class="stat-card-label">Roles Activos</div>
+          <div class="stat-card-value" id="count-active">0</div>
+        </div>
+        <div class="stat-card stat-card-coral">
+          <div class="stat-card-decoration"></div>
+          <div class="stat-card-icon"><i data-lucide="shield-off"></i></div>
+          <div class="stat-card-label">Roles Inactivos</div>
+          <div class="stat-card-value" id="count-inactive">0</div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-field filter-search">
+          <label class="filter-label">Buscar</label>
+          <div class="filter-input-wrapper">
+            <input
+              type="text"
+              class="filter-input"
+              placeholder="Buscar por nombre o descripción..."
+              id="search-input"
+            />
+            <i data-lucide="search" class="filter-icon"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card animate-in delay-3">
+        <div class="table-card-header">
+          <h2>
+            <span>Lista de Roles del Sistema</span>
+            <span class="count-badge" id="roles-count">0</span>
+          </h2>
+        </div>
+
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="col-id" style="width: 80px">ID</th>
+                <th class="col-role">Nombre del Rol</th>
+                <th class="col-email">Descripción</th>
+                <th class="col-status">Estado</th>
+                <th class="col-actions">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="roles-table-body"></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div class="table-footer-info" id="table-info-text">
+            Cargando información...
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="modal-overlay" id="modal-role">
+      <div class="modal" style="max-width: 500px">
+        <div class="modal-header">
+          <h2>Agregar Rol</h2>
+          <button class="btn-close-modal" id="btn-close-modal">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <form class="modal-form" id="form-role" autocomplete="off">
+          <div class="form-section-label">Detalles del Rol</div>
+
+          <div class="form-group full-width" style="margin-bottom: 1rem">
+            <label for="role-name">Nombre del Rol</label>
+            <input
+              type="text"
+              id="role-name"
+              required
+              minlength="3"
+              maxlength="30"
+              pattern="^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$"
+              title="Solo letras y espacios (Ej: Gerente)"
+              autocomplete="off"
+              placeholder="Ej: Gerente"
+            />
+          </div>
+
+          <div class="form-group full-width" style="margin-bottom: 1rem">
+            <label for="role-desc">Descripción</label>
+            <input
+              type="text"
+              id="role-desc"
+              required
+              maxlength="150"
+              autocomplete="off"
+              placeholder="Breve descripción de los permisos"
+            />
+          </div>
+
+          <div class="form-group full-width" style="margin-bottom: 1.5rem">
+            <label for="status">Estado Inicial</label>
+            <select id="status" required>
+              <option value="active" selected>Activo</option>
+              <option value="inactive">Inactivo</option>
+            </select>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" id="btn-cancel">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-submit-modal">
+              <i data-lucide="save"></i> Registrar Rol
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-view-role">
+      <div class="modal" style="max-width: 500px">
+        <div class="modal-header">
+          <h2 id="view-role-title">Ver Rol</h2>
+          <button
+            type="button"
+            class="btn-close-modal"
+            id="btn-close-view-modal"
+          >
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <form class="modal-form" id="form-view-role" autocomplete="off">
+          <div class="view-mode" id="view-mode">
+            <div class="info-section">
+              <div class="info-item">
+                <span class="info-label">Nombre del Rol</span
+                ><span class="info-value" id="view-role-name">-</span>
+              </div>
+            </div>
+            <div class="info-section">
+              <div class="info-item">
+                <span class="info-label">Descripción</span
+                ><span class="info-value" id="view-role-desc">-</span>
+              </div>
+            </div>
+            <div class="info-section">
+              <div class="info-item">
+                <span class="info-label">Estado</span
+                ><span class="info-value info-badge" id="view-role-status"
+                  >-</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="edit-mode hidden" id="edit-mode">
+            <div class="form-group full-width" style="margin-bottom: 1rem">
+              <label for="edit-role-name">Nombre del Rol</label>
+              <input
+                type="text"
+                id="edit-role-name"
+                required
+                minlength="3"
+                maxlength="30"
+                pattern="^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$"
+                title="Solo letras y espacios (Ej: Gerente)"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-group full-width" style="margin-bottom: 1rem">
+              <label for="edit-role-desc">Descripción</label>
+              <input
+                type="text"
+                id="edit-role-desc"
+                maxlength="150"
+                required
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-group full-width" style="margin-bottom: 1.5rem">
+              <label for="edit-status">Estado</label>
+              <select id="edit-status" required>
+                <option value="active">Activo</option>
+                <option value="inactive">Inactivo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" id="btn-cancel-view">
+              Cerrar
+            </button>
+            <button type="button" class="btn btn-outline" id="btn-edit-toggle">
+              <i data-lucide="edit-2"></i> Editar
+            </button>
+            <button
+              type="button"
+              class="btn-cancel hidden"
+              id="btn-cancel-edit"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn-submit-modal hidden"
+              id="btn-save-role"
+            >
+              <i data-lucide="save"></i> Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="./roles.js"></script>
+  </body>
+</html>

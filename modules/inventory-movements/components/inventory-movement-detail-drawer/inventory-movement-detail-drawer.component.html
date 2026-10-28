@@ -1,0 +1,123 @@
+<div class="inventory-movement-drawer-overlay" id="inventoryMovementDrawerOverlay"></div>
+<div class="inventory-movement-drawer" id="inventoryMovementDrawer">
+  <div class="inventory-movement-drawer-header">
+    <div class="inventory-movement-drawer-header-top">
+      <div class="inventory-movement-drawer-title">
+        <i data-lucide="archive-restore"></i>
+        Detalle de movimiento
+      </div>
+      <button class="inventory-movement-drawer-close" id="inventoryMovementDrawerCloseBtn" type="button" aria-label="Cerrar detalle">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <div class="inventory-movement-drawer-identity">
+      <div>
+        <span class="inventory-movement-drawer-code" id="drawerMovementTypeTitle">-</span>
+        <span class="inventory-movement-drawer-status" id="drawerMovementType">
+          <i data-lucide="circle-dot"></i> Sin informacion
+        </span>
+      </div>
+      <div class="inventory-movement-drawer-total">
+        <div class="inventory-movement-drawer-total-label">Fecha</div>
+        <div class="inventory-movement-drawer-total-value" id="drawerMovementDate">-</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="inventory-movement-drawer-body">
+    <div class="drawer-section">
+      <div class="drawer-section-title">
+        <i data-lucide="info"></i> Informacion general
+      </div>
+      <div class="inventory-movement-info-grid">
+        <div class="inventory-movement-info-item">
+          <span class="inventory-movement-info-label">Tipo</span>
+          <span class="inventory-movement-info-value" id="drawerInfoMovementType">-</span>
+        </div>
+        <div class="inventory-movement-info-item">
+          <span class="inventory-movement-info-label">Venta relacionada</span>
+          <span class="inventory-movement-info-value mono" id="drawerSaleCode">-</span>
+        </div>
+        <div class="inventory-movement-info-item">
+          <span class="inventory-movement-info-label">Pedido relacionado</span>
+          <span class="inventory-movement-info-value mono" id="drawerOrderCode">-</span>
+        </div>
+        <div class="inventory-movement-info-item">
+          <span class="inventory-movement-info-label">Fecha</span>
+          <span class="inventory-movement-info-value" id="drawerInfoMovementDate">-</span>
+        </div>
+        <div class="inventory-movement-info-item">
+          <span class="inventory-movement-info-label">Usuario creador</span>
+          <span class="inventory-movement-info-value" id="drawerCreatedBy">-</span>
+        </div>
+        <div class="inventory-movement-info-item">
+          <span class="inventory-movement-info-label">Notas</span>
+          <span class="inventory-movement-info-value" id="drawerNotes">-</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="inventory-movement-meta-cards">
+        <div class="inventory-movement-meta-card">
+          <div class="inventory-movement-meta-icon">
+            <i data-lucide="user"></i>
+          </div>
+          <div class="inventory-movement-meta-info">
+            <span class="inventory-movement-meta-label">Registrado por</span>
+            <span class="inventory-movement-meta-value" id="drawerMetaUser">-</span>
+            <span class="inventory-movement-meta-sub" id="drawerMetaDate">-</span>
+          </div>
+        </div>
+        <div class="inventory-movement-meta-card">
+          <div class="inventory-movement-meta-icon">
+            <i data-lucide="link"></i>
+          </div>
+          <div class="inventory-movement-meta-info">
+            <span class="inventory-movement-meta-label">Documento relacionado</span>
+            <span class="inventory-movement-meta-value" id="drawerMetaDocument">-</span>
+            <span class="inventory-movement-meta-sub" id="drawerMetaDocumentHint">Venta o pedido asociado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">
+        <i data-lucide="list-tree"></i> Detalles del movimiento
+      </div>
+      <div class="inventory-movement-details-wrapper">
+        <table class="inventory-movement-details-table">
+          <thead>
+            <tr>
+              <th>Lote</th>
+              <th>Origen</th>
+              <th>Destino</th>
+              <th style="text-align: center">Cantidad</th>
+              <th style="text-align: right">Costo unitario</th>
+              <th style="text-align: right">Precio unitario</th>
+              <th>Usuario</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody id="drawerMovementDetailsTableBody"></tbody>
+        </table>
+        <div class="inventory-movement-summary">
+          <span class="summary-label" id="drawerDetailsCount">Total detalles: 0</span>
+          <span class="summary-label" id="drawerUnitsCount">Total unidades: 0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="inventory-movement-drawer-footer">
+    <button class="drawer-btn drawer-btn-secondary" type="button" id="inventoryMovementDrawerFooterCloseBtn">
+      Cerrar
+    </button>
+    <div class="drawer-btn-spacer"></div>
+    <button class="drawer-btn drawer-btn-primary" type="button" onclick="window.print()">
+      <i data-lucide="printer"></i> Imprimir
+    </button>
+  </div>
+</div>

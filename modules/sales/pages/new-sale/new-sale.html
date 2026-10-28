@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nueva venta - Sorbeteria Herrera</title>
+
+    <link rel="stylesheet" href="../../../../styles/variables.css" />
+    <link rel="stylesheet" href="../../../../styles/reset.css" />
+    <link rel="stylesheet" href="../../../../styles/global.css" />
+    <link rel="stylesheet" href="../../../../styles/layout.css" />
+    <link rel="stylesheet" href="../../../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../../../shared/components/topbar/topbar.css" />
+    <link rel="stylesheet" href="../../../shared/components/buttons/buttons.css" />
+    <link rel="stylesheet" href="../../components/sale-payment-modal/sale-payment-modal.component.css" />
+    <link rel="stylesheet" href="./new-sale.css" />
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  </head>
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../../../shared/components/sidebar/sidebar.js"></script>
+
+    <div id="topbar-placeholder"></div>
+    <script src="../../../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content">
+      <div class="page-header animate-in">
+        <div class="page-header-left">
+          <h1>Nueva venta</h1>
+        </div>
+        <div class="page-header-actions">
+          <a class="btn btn-outline" href="/modules/sales/pages/sales-dashboard/sales-dashboard.html">
+            <i data-lucide="file-chart-column" style="width: 16px; height: 16px"></i>
+            <span class="btn-label">Dashboard</span>
+          </a>
+        </div>
+      </div>
+
+      <section class="invoice-shell animate-in delay-1">
+        <div class="sale-alert" id="saleAlert" role="alert" aria-live="polite"></div>
+
+        <div class="invoice-header">
+          <div class="sale-type-tabs" aria-label="Tipo de venta">
+            <input type="radio" name="saleType" id="saleTypeRetail" checked />
+            <label for="saleTypeRetail" class="sale-tab">Venta al detalle</label>
+
+            <input type="radio" name="saleType" id="saleTypeWholesale" />
+            <label for="saleTypeWholesale" class="sale-tab">Venta al mayoreo</label>
+          </div>
+
+          <div class="invoice-fields">
+            <div class="invoice-field code-field">
+              <label>Codigo de venta</label>
+              <div class="generated-code">Se generara automaticamente</div>
+            </div>
+
+            <div class="invoice-field">
+              <label for="saleDate">Fecha</label>
+              <input id="saleDate" type="datetime-local" class="invoice-input" />
+            </div>
+
+            <div class="invoice-field">
+              <label for="saleUser">Usuario</label>
+              <input id="saleUser" type="text" class="invoice-input" value="Usuario actual" readonly />
+            </div>
+
+            <div class="invoice-field retail-payment-field">
+              <label for="retailPaymentType">Tipo de pago</label>
+              <input id="retailPaymentType" type="text" class="invoice-input" value="Contado" readonly />
+            </div>
+
+            <div class="invoice-field wholesale-payment-field">
+              <label for="wholesalePaymentType">Tipo de pago</label>
+              <select id="wholesalePaymentType" class="invoice-input invoice-select">
+                <option>Contado</option>
+                <option>Credito</option>
+              </select>
+            </div>
+
+            <div class="invoice-field retail-client-field">
+              <label for="retailCustomer">Cliente</label>
+              <input id="retailCustomer" type="text" class="invoice-input" value="Cliente generico" readonly />
+            </div>
+
+            <div class="invoice-field wholesale-client-field">
+              <label for="customerSearch">Cliente</label>
+              <div class="inline-search">
+                <i data-lucide="search"></i>
+                <input id="customerSearch" type="text" placeholder="Buscar cliente" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-entry">
+          <div class="product-search">
+            <label for="productSearch">Producto</label>
+            <div class="autocomplete-shell">
+              <div class="inline-search inline-search-lg">
+                <i data-lucide="search"></i>
+                <input id="productSearch" type="text" placeholder="Buscar producto por nombre" autocomplete="off" />
+                <span id="productsLoadState">Cargando...</span>
+              </div>
+              <div class="autocomplete-list" id="productAutocomplete"></div>
+            </div>
+          </div>
+
+          <div class="quantity-entry">
+            <label for="productQuantity">Cantidad</label>
+            <input id="productQuantity" type="number" min="1" value="1" class="invoice-input" />
+          </div>
+
+          <button class="btn btn-primary add-product-btn" type="button" id="btnAddProduct">
+            <i data-lucide="plus" style="width: 18px; height: 18px"></i>
+            Agregar
+          </button>
+        </div>
+
+        <div class="invoice-table-wrap">
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th style="width: 120px; text-align: center">Cantidad</th>
+                <th style="width: 160px; text-align: right">Precio</th>
+                <th style="width: 170px; text-align: right">Subtotal</th>
+                <th style="width: 110px; text-align: center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="saleProductsTableBody">
+              <tr class="invoice-empty-row">
+                <td colspan="5">
+                  <div class="invoice-empty">
+                    <i data-lucide="receipt-text"></i>
+                    <span>No hay productos agregados</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="invoice-footer">
+          <div class="payment-status">
+            <span class="status-label">Estado de pago</span>
+            <strong id="paymentStatusText">Pendiente de registrar</strong>
+          </div>
+
+          <div class="invoice-totals">
+            <div class="total-line">
+              <span>Subtotal</span>
+              <strong id="saleSubtotal">C$0.00</strong>
+            </div>
+            <div class="total-line">
+              <span>Descuento</span>
+              <strong id="saleDiscount">C$0.00</strong>
+            </div>
+            <div class="total-line total-line-main">
+              <span>Total</span>
+              <strong id="saleTotal">C$0.00</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="invoice-actions">
+          <button class="btn btn-outline" type="button" id="btnCancelSale">
+            <i data-lucide="x" style="width: 16px; height: 16px"></i>
+            Cancelar
+          </button>
+          <button class="btn btn-primary register-payment-btn" type="button" id="btnOpenPaymentModal">
+            <i data-lucide="wallet" style="width: 18px; height: 18px"></i>
+            Registrar pago
+          </button>
+          <button class="btn btn-disabled register-sale-btn" type="button" id="btnRegisterSale" disabled>
+            <i data-lucide="check-circle" style="width: 18px; height: 18px"></i>
+            Registrar venta
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <div class="payment-modal-overlay" id="paymentModalPreview" aria-hidden="true">
+      <div class="payment-modal" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+        <div class="payment-modal-header">
+          <div class="payment-modal-icon"><i data-lucide="wallet-cards"></i></div>
+          <div>
+            <div class="payment-modal-title" id="paymentModalTitle">Registrar pago</div>
+            <div class="payment-modal-subtitle">Preparado para contado, credito y pagos multiples.</div>
+          </div>
+          <button class="payment-modal-close" type="button" id="paymentModalCloseBtn" aria-label="Cerrar modal">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="payment-modal-body">
+          <div class="payment-total-strip">
+            <span>Total a pagar</span>
+            <strong id="paymentModalTotal">C$0.00</strong>
+          </div>
+
+          <div class="payment-form-grid">
+            <div class="payment-field">
+              <label class="payment-label" for="paymentMethod">Metodo de pago</label>
+              <select class="payment-select" id="paymentMethod">
+                <option value="1">Efectivo</option>
+                <option value="2">Transferencia</option>
+                <option value="3">Tarjeta</option>
+              </select>
+            </div>
+            <div class="payment-field">
+              <label class="payment-label" for="paymentAmount">Monto</label>
+              <input class="payment-input" id="paymentAmount" type="text" placeholder="C$0.00" />
+            </div>
+            <div class="payment-field">
+              <label class="payment-label" for="paymentReference">Referencia</label>
+              <input class="payment-input" id="paymentReference" type="text" placeholder="Opcional" />
+            </div>
+            <div class="payment-field">
+              <label class="payment-label" for="paymentDate">Fecha</label>
+              <input class="payment-input" id="paymentDate" type="datetime-local" />
+            </div>
+          </div>
+
+          <div class="payment-list">
+            <div class="payment-list-header">
+              <strong>Pagos registrados</strong>
+              <button class="btn btn-outline" type="button">
+                <i data-lucide="plus" style="width: 14px; height: 14px"></i>
+                Agregar pago
+              </button>
+            </div>
+            <div class="payment-empty">
+              <i data-lucide="receipt"></i>
+              <span>Sin pagos registrados</span>
+            </div>
+          </div>
+
+          <div class="payment-change-row">
+            <span>Cambio / vuelto</span>
+            <strong id="paymentChange">C$0.00</strong>
+          </div>
+
+          <div class="payment-modal-message" id="paymentModalMessage"></div>
+        </div>
+
+        <div class="payment-modal-footer">
+          <button class="btn btn-outline" type="button" id="paymentModalCancelBtn">Cancelar</button>
+          <button class="btn btn-primary" type="button" id="paymentModalConfirmBtn">Confirmar pago</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../models/sale.model.js"></script>
+    <script src="../../services/sales.service.js"></script>
+    <script src="../../components/sale-products-table/sale-products-table.component.js"></script>
+    <script src="../../components/sale-payment-modal/sale-payment-modal.component.js"></script>
+    <script src="./new-sale.js"></script>
+  </body>
+</html>

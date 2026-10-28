@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atributos - Sorbetería Herrera</title>
+
+    <script>
+      if (!localStorage.getItem("isLoggedIn")) {
+        window.location.href = "/modules/login/login.html";
+      }
+    </script>
+
+    <link rel="stylesheet" href="../../styles/variables.css" />
+    <link rel="stylesheet" href="../../styles/reset.css" />
+    <link rel="stylesheet" href="../../styles/global.css" />
+    <link rel="stylesheet" href="../../styles/layout.css" />
+
+    <link rel="stylesheet" href="../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../shared/components/topbar/topbar.css" />
+    <link
+      rel="stylesheet"
+      href="../shared/components/filter-bar/filter-bar.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../shared/components/stat-card/stat-card.css"
+    />
+    <link rel="stylesheet" href="../shared/components/buttons/buttons.css" />
+
+    <link rel="stylesheet" href="./attributes.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../shared/components/sidebar/sidebar.js"></script>
+
+    <div id="topbar-placeholder"></div>
+    <script src="../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content">
+      <div class="page-header animate-in">
+        <div class="page-header-left">
+          <h1>Atributos de Producto</h1>
+          <p class="page-subtitle" id="page-subtitle">
+            Administra las líneas del sistema
+          </p>
+        </div>
+
+        <div class="page-header-actions">
+          <button class="btn btn-primary" id="btn-open-modal" type="button">
+            <i data-lucide="plus"></i>
+            <span class="btn-label" id="btn-add-label">Nueva Línea</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-row animate-in delay-1">
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-icon">
+            <i data-lucide="tags"></i>
+          </div>
+          <div class="stat-card-label">Total</div>
+          <div class="stat-card-value" id="card-total">0</div>
+        </div>
+
+        <div class="stat-card stat-card-mint">
+          <div class="stat-card-icon">
+            <i data-lucide="check-circle"></i>
+          </div>
+          <div class="stat-card-label">Activos</div>
+          <div class="stat-card-value" id="card-active">0</div>
+        </div>
+
+        <div class="stat-card stat-card-coral">
+          <div class="stat-card-icon">
+            <i data-lucide="x-circle"></i>
+          </div>
+          <div class="stat-card-label">Inactivos</div>
+          <div class="stat-card-value" id="card-inactive">0</div>
+        </div>
+      </div>
+
+      <div class="tabs-wrapper animate-in delay-2">
+        <button class="tab-btn active" data-type="lines" type="button">
+          Líneas
+        </button>
+        <button class="tab-btn" data-type="presentations" type="button">
+          Presentaciones
+        </button>
+      </div>
+
+      <div class="table-card animate-in delay-3">
+        <div class="table-card-header">
+          <h2 id="table-title">
+            Lista de Líneas
+            <span class="count-badge" id="attributes-count">0</span>
+          </h2>
+        </div>
+
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th class="col-actions-header">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="attributes-table-body">
+              <tr>
+                <td colspan="3">Cargando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-footer" id="table-info-text">Cargando...</div>
+        <div class="table-pagination" id="table-pagination"></div>
+      </div>
+    </main>
+
+    <div class="modal-overlay" id="modal-attribute">
+      <div class="modal modal-large">
+        <div class="modal-header">
+          <h2 id="modal-title">Agregar Línea</h2>
+          <button class="btn-close-modal" id="btn-close-modal" type="button">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <form class="modal-form" id="form-attribute">
+          <input type="hidden" id="attribute-id" />
+
+          <div class="form-group">
+            <label for="attribute-name">Nombre</label>
+            <input
+              type="text"
+              id="attribute-name"
+              required
+              minlength="3"
+              maxlength="100"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="attribute-status">Estado</label>
+            <select id="attribute-status">
+              <option value="true">Activo</option>
+              <option value="false">Inactivo</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="line-presentations-group">
+            <label>Presentaciones disponibles para esta línea</label>
+            <div id="line-presentations-checkboxes" class="checkbox-grid"></div>
+            <small class="field-help">
+              Debes seleccionar al menos una presentación.
+            </small>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" id="btn-cancel">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-submit-modal">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-line-presentations">
+      <div class="modal modal-large">
+        <div class="modal-header">
+          <div>
+            <h2 id="line-presentations-title">Presentaciones por línea</h2>
+            <p class="modal-subtitle" id="line-presentations-subtitle">
+              Línea seleccionada
+            </p>
+          </div>
+
+          <button
+            class="btn-close-modal"
+            id="btn-close-line-presentations"
+            type="button"
+          >
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="line-presentations-body">
+          <div class="related-table-card">
+            <div class="related-table-header">
+              <h3>Agregar presentación</h3>
+            </div>
+
+            <div class="form-group">
+              <label for="presentation-select">Presentación disponible</label>
+              <select id="presentation-select">
+                <option value="">Seleccione una presentación</option>
+              </select>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn-submit-modal"
+                id="btn-add-presentation-to-line"
+              >
+                Agregar presentación
+              </button>
+            </div>
+          </div>
+
+          <div class="related-table-card related-table-card-view">
+            <div class="related-table-header">
+              <h3>Presentaciones asignadas</h3>
+              <span class="count-badge" id="line-presentations-count">0</span>
+            </div>
+
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Presentación</th>
+                    <th class="col-actions-header">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="line-presentations-table-body">
+                  <tr>
+                    <td colspan="2">Sin datos.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-footer" id="line-presentations-info-text">
+              Sin datos.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+    </script>
+    <script type="module" src="./attributes.js"></script>
+  </body>
+</html>

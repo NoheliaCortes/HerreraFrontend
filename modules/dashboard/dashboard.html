@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <script>
+      if (!localStorage.getItem("isLoggedIn")) {
+        window.location.href = "/modules/login/login.html";
+      }
+    </script>
+    <link rel="stylesheet" href="../../styles/variables.css" />
+    <link rel="stylesheet" href="../../styles/reset.css" />
+    <link rel="stylesheet" href="../../styles/global.css" />
+    <link rel="stylesheet" href="../../styles/layout.css" />
+
+    <link rel="stylesheet" href="../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../shared/components/topbar/topbar.css" />
+    <link rel="stylesheet" href="../shared/components/buttons/buttons.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="/modules/dashboard/dashboard.css" />
+  </head>
+  <body>
+    <div id="layout-placeholder"></div>
+    <script src="../shared/components/sidebar/sidebar.js"></script>
+
+    <div id="topbar-placeholder"></div>
+    <script src="../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">Vista General</h1>
+      </div>
+
+      <section class="powerbi-panel animate-in delay-1">
+        <div class="panel-header powerbi-header">
+          <div>
+            <h2 class="panel-title">An&aacute;lisis de ventas e inventario</h2>
+            <p class="panel-description">
+              Reporte BI generado desde Integration Services, Data Warehouse y Power BI.
+            </p>
+          </div>
+          <a
+            href="https://app.powerbi.com/view?r=eyJrIjoiZWU4OTJjZTgtODlkNi00OTIxLTk1N2YtOThkMzhlZTAzMWNjIiwidCI6ImU0NzY0NmZlLWRhMjctNDUxOC04NDM2LTVmOGIxNThiYTEyNyIsImMiOjR9"
+            class="btn-link powerbi-open-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Abrir reporte <i data-lucide="external-link"></i>
+          </a>
+        </div>
+
+        <div class="powerbi-frame-wrapper">
+          <iframe
+            class="powerbi-frame"
+            src="https://app.powerbi.com/view?r=eyJrIjoiZWU4OTJjZTgtODlkNi00OTIxLTk1N2YtOThkMzhlZTAzMWNjIiwidCI6ImU0NzY0NmZlLWRhMjctNDUxOC04NDM2LTVmOGIxNThiYTEyNyIsImMiOjR9"
+            title="Dashboard Power BI"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <div class="powerbi-fallback">
+          
+          <a
+            href="https://app.powerbi.com/view?r=eyJrIjoiZWU4OTJjZTgtODlkNi00OTIxLTk1N2YtOThkMzhlZTAzMWNjIiwidCI6ImU0NzY0NmZlLWRhMjctNDUxOC04NDM2LTVmOGIxNThiYTEyNyIsImMiOjR9"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Abrir reporte en Power BI
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

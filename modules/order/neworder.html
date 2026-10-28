@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nuevo Pedido</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="../../styles/variables.css" />
+    <link rel="stylesheet" href="../../styles/reset.css" />
+    <link rel="stylesheet" href="../../styles/global.css" />
+    <link rel="stylesheet" href="../../styles/layout.css" />
+
+    <link rel="stylesheet" href="../shared/components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../shared/components/topbar/topbar.css" />
+    <link rel="stylesheet" href="../shared/components/filter-bar/filter-bar.css" />
+    <link rel="stylesheet" href="../shared/components/stat-card/stat-card.css" />
+    <link rel="stylesheet" href="../shared/components/buttons/buttons.css" />
+    <link rel="stylesheet" href="/modules/order/neworder.css" />
+  </head>
+  <body>
+   <div id="layout-placeholder"></div>
+    <script src="../shared/components/sidebar/sidebar.js"></script>
+    <div id="topbar-placeholder"></div>
+    <script src="../shared/components/topbar/topbar.js"></script>
+
+    <main class="main-content animate-in">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Nuevo Pedido</h1>
+          <p class="page-subtitle">Gestión de pedido actual</p>
+        </div>
+        <div class="action-header">
+          <a class="btn btn-primary" href="/modules/order/order.html">
+            <i data-lucide="file-chart-column"></i>Reporte de pedidos</a
+          >
+        </div>
+      </div>
+      <section class="pedido-container">
+        <div class="card card-pedido card-highlight">
+          <h3 class="card-title">DATOS DE ENCABEZADO</h3>
+          <div class="grid-form">
+            <div class="form-group">
+              <label>Número de pedido:</label>
+              <input
+                type="text"
+                value="PE-0001"
+                readonly
+                class="input-readonly"
+              />
+            </div>
+            <div class="form-group">
+              <label>Fecha de registro:</label>
+              <input type="date" />
+            </div>
+            <div class="form-group">
+              <label>Fecha de entrega:</label>
+              <input type="date" />
+            </div>
+            <div class="form-group">
+              <label>Estado de pedido:</label>
+              <select class="select-field">
+                <option value="pendiente">Pendiente</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-pedido card-highlight">
+          <h3 class="card-title">INFORMACIÓN CLIENTE</h3>
+          <div class="grid-form">
+            <div class="form-group">
+              <label>Cliente:</label>
+              <input type="text" placeholder="Nombre completo" />
+            </div>
+            <div class="form-group">
+              <label>Departamento:</label>
+              <input type="text" placeholder="Ej: Carazo" />
+            </div>
+            <div class="form-group">
+              <label>Municipio:</label>
+              <input type="text" placeholder="Ej: Jinotepe" />
+            </div>
+            <div class="form-group">
+              <label>Punto de venta:</label>
+              <input type="text" placeholder="Local central" />
+            </div>
+            <div class="form-group full-width">
+              <label>Dirección:</label>
+              <textarea
+                rows="2"
+                placeholder="Dirección exacta del cliente"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="selector-producto-container"
+          class="card card-pedido card-highlight"
+        >
+          <h3 class="card-title">SELECCIONAR PRODUCTOS</h3>
+          <div class="selector-grid">
+            <div class="form-group search-box">
+              <label>Buscar:</label>
+              <div class="input-icon">
+                <i data-lucide="search"></i>
+                <input type="text" placeholder="Buscar..." />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Línea:</label>
+              <select class="select-field">
+                <option value="Tradicional">Tradicional</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Sabor:</label>
+              <select class="select-field">
+                <option value="Mango">Mango</option>
+                <option value="Pistacho">Pistacho</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Presentación:</label>
+              <select class="select-field">
+                <option value="4 onza">4 onza</option>
+                <option value="8 onza">8 onza</option>
+                <option value="1/4 Galon">1/4 Galon</option>
+                <option value="1/2 Galon">1/2 Galon</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Cantidad:</label>
+              <input type="number" value="1" min="1" />
+            </div>
+            <div class="selector-buttons">
+              <button type="button" class="btn-sec btn-limpiar">Limpiar</button>
+              <button type="button" class="btn-pri btn-aceptar">Aceptar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-pedido table-section">
+          <div class="table-wrapper">
+            <table class="pedido-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Cantidad</th>
+                  <th>Precio</th>
+                  <th>Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Sorbete tradicional fresa</td>
+                  <td>3</td>
+                  <td>70.00 C$</td>
+                  <td>210.00 C$</td>
+                </tr>
+                <tr>
+                  <td>Sorbete tradicional mango</td>
+                  <td>2</td>
+                  <td>70.00 C$</td>
+                  <td>140.00 C$</td>
+                </tr>
+                <tr>
+                  <td>Sorbete fresa light</td>
+                  <td>4</td>
+                  <td>75.00 C$</td>
+                  <td>300.00 C$</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="resumen-final-container">
+          <div class="resumen-card">
+            <div class="resumen-row total-row">
+              <span>Total :</span>
+              <input type="text" readonly value="0.00 C$" />
+            </div>
+
+            <button class="btn-registrar-venta">Registrar Pedido</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/shared/components/sidebar/sidebar.js"></script>
+    <script src="/shared/components/topbar/topbar.js"></script>
+    <script src="/modules/order/order.js"></script>
+  </body>
+</html>

@@ -1,0 +1,262 @@
+/* ============================================================
+   customer-form-modal.component.css
+   Estilos del modal Crear / Editar cliente
+   ============================================================ */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    width: 100%;
+    max-width: 580px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    transform: translateY(12px);
+    transition: transform 0.25s ease;
+    max-height: 85vh;    /* Limita la altura del modal en computadoras al 85% de la pantalla */
+    overflow-y: auto;
+}
+
+.modal-overlay.active .modal {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.modal-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.btn-close-modal {
+    background: #F3F4F6;
+    border: none;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6B7280;
+    transition: all 0.2s;
+}
+
+.btn-close-modal svg {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-close-modal:hover {
+    background: #E5E7EB;
+    color: #111827;
+}
+
+.form-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #9CA3AF;
+    margin-bottom: 16px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Campos que ocupan el ancho completo del grid */
+.form-group--full {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px 14px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: #111827;
+    background: #FAFAFA;
+    outline: none;
+    transition: all 0.2s;
+    appearance: none;
+}
+
+.form-group input::placeholder {
+    color: #D1D5DB;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #00C296;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(0, 194, 150, 0.1);
+}
+
+.form-group input.input-error,
+.form-group select.input-error {
+    border-color: #FA897B;
+    background: #fff8f7;
+}
+
+/* Mensaje de error de la API */
+.form-api-error {
+    background: rgba(250, 137, 123, 0.1);
+    border: 1px solid rgba(250, 137, 123, 0.3);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #c0392b;
+    margin-bottom: 16px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid #F3F4F6;
+}
+
+.btn-cancel {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1.5px solid #E5E7EB;
+    background: white;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    color: #6B7280;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background: #F9FAFB;
+    color: #111827;
+}
+
+.btn-submit-modal {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: none;
+    background: #00C296;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-submit-modal svg {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-submit-modal:hover:not(:disabled) {
+    background: #04a598;
+    transform: translateY(-1px);
+}
+
+.btn-submit-modal:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ─── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: 12px;
+        align-items: flex-end;
+    }
+
+    .modal {
+        max-width: 100%;
+        padding: 22px;
+        border-radius: 18px;
+        max-height: 92vh;
+        overflow-y: auto;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group--full {
+        grid-column: 1;
+    }
+
+    .modal-footer {
+        flex-direction: column-reverse;
+        gap: 10px;
+        padding-top: 16px;
+    }
+
+    .btn-cancel,
+    .btn-submit-modal {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal {
+        padding: 18px;
+        border-radius: 16px;
+    }
+
+    .modal-header h2 {
+        font-size: 16px;
+    }
+
+    .btn-close-modal {
+        width: 30px;
+        height: 30px;
+    }
+}

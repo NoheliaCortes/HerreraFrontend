@@ -1,0 +1,465 @@
+.inventory-movement-drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 1200;
+}
+
+.inventory-movement-drawer-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.inventory-movement-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 680px;
+    height: 100vh;
+    background: var(--color-white, #ffffff);
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1201;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.inventory-movement-drawer.active {
+    transform: translateX(0);
+}
+
+.inventory-movement-drawer-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #F1F5F9;
+    background: var(--color-white, #ffffff);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.inventory-movement-drawer-header-top,
+.inventory-movement-drawer-identity,
+.inventory-movement-drawer-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.inventory-movement-drawer-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.inventory-movement-drawer-title i {
+    width: 20px;
+    height: 20px;
+    color: var(--color-brand, #00C296);
+}
+
+.inventory-movement-drawer-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #64748B;
+    cursor: pointer;
+}
+
+.inventory-movement-drawer-close:hover {
+    background: #F1F5F9;
+    color: #111827;
+}
+
+.inventory-movement-drawer-identity {
+    margin-top: 20px;
+}
+
+.inventory-movement-drawer-code {
+    display: block;
+    font-size: 26px;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #111827;
+}
+
+.inventory-movement-drawer-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: #F1F5F9;
+    color: #64748B;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.inventory-movement-drawer-status i {
+    width: 12px;
+    height: 12px;
+}
+
+.inventory-movement-drawer-status.is-restock,
+.inventory-movement-drawer-status.is-positive {
+    background: rgba(0, 194, 150, 0.1);
+    color: var(--color-brand, #00C296);
+}
+
+.inventory-movement-drawer-status.is-transfer {
+    background: rgba(74, 144, 217, 0.12);
+    color: #2563EB;
+}
+
+.inventory-movement-drawer-status.is-negative {
+    background: rgba(250, 137, 123, 0.12);
+    color: #DC2626;
+}
+
+.inventory-movement-drawer-total {
+    text-align: right;
+}
+
+.inventory-movement-drawer-total-label {
+    font-size: 12px;
+    color: #64748B;
+    font-weight: 700;
+}
+
+.inventory-movement-drawer-total-value {
+    margin-top: 4px;
+    font-size: 18px;
+    color: var(--color-brand, #00C296);
+    font-weight: 800;
+}
+
+.inventory-movement-drawer-body {
+    flex: 1;
+    overflow: auto;
+    padding: 0 24px 24px;
+    background: #ffffff;
+}
+
+.drawer-section {
+    margin-top: 24px;
+    margin-bottom: 0;
+}
+
+.drawer-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-hint, #64748B);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.drawer-section-title i {
+    width: 16px;
+    height: 16px;
+    color: var(--color-brand, #00C296);
+}
+
+.inventory-movement-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 16px;
+    background: var(--color-bg-page, #F8FAFC);
+    border-radius: var(--radius-card, 12px);
+}
+
+.inventory-movement-info-item {
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    min-width: 0;
+}
+
+.inventory-movement-info-item--wide {
+    grid-column: 1 / -1;
+}
+
+.inventory-movement-info-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--color-text-hint, #64748B);
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.inventory-movement-info-value {
+    color: #111827;
+    font-size: 13px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.inventory-movement-info-value.mono,
+.mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.inventory-movement-meta-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.inventory-movement-meta-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: rgba(0, 194, 150, 0.04);
+    border: 1px solid rgba(0, 194, 150, 0.1);
+    border-radius: var(--radius-card, 12px);
+    min-width: 0;
+}
+
+.inventory-movement-meta-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(0, 194, 150, 0.15);
+    color: var(--color-brand, #00C296);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.inventory-movement-meta-icon i {
+    width: 18px;
+    height: 18px;
+}
+
+.inventory-movement-meta-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.inventory-movement-meta-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--color-text-hint, #64748B);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.inventory-movement-meta-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text-heading, #111827);
+    overflow-wrap: anywhere;
+}
+
+.inventory-movement-meta-sub {
+    font-size: 11px;
+    color: var(--color-text-hint, #64748B);
+    overflow-wrap: anywhere;
+}
+
+.inventory-movement-details-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #F1F5F9;
+    border-radius: var(--radius-card, 12px);
+    overflow: hidden;
+}
+
+.inventory-movement-details-table {
+    width: 100%;
+    min-width: 980px;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.inventory-movement-details-table th {
+    padding: 12px 14px;
+    background: #F8FAFC;
+    color: #64748B;
+    font-size: 11px;
+    text-transform: uppercase;
+    text-align: left;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.inventory-movement-details-table td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #F1F5F9;
+    color: #374151;
+}
+
+.inventory-movement-details-table tr:last-child td {
+    border-bottom: none;
+}
+
+.movement-lot-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.movement-lot-sub {
+    font-size: 10.5px;
+    color: var(--color-text-hint, #64748B);
+}
+
+.lot-cell {
+    display: inline-flex;
+    padding: 4px 9px;
+    border-radius: 6px;
+    background: var(--color-bg-page, #F8FAFC);
+    color: var(--color-text-heading, #111827);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.location-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.location-badge.source {
+    background: rgba(74, 144, 217, 0.12);
+    color: #2563EB;
+}
+
+.location-badge.destination {
+    background: rgba(0, 194, 150, 0.12);
+    color: var(--color-brand, #00C296);
+}
+
+.location-badge.empty {
+    background: #F1F5F9;
+    color: var(--color-text-hint, #64748B);
+}
+
+.quantity-cell {
+    text-align: center;
+    font-weight: 800;
+    color: #111827;
+}
+
+.money-cell {
+    text-align: right;
+    font-weight: 700;
+    color: #111827;
+}
+
+.inventory-movement-drawer-state {
+    padding: 18px;
+    text-align: center;
+    color: var(--color-text-hint, #6B7280);
+    font-weight: 600;
+}
+
+.inventory-movement-drawer-state--error {
+    color: #DC2626;
+}
+
+.inventory-movement-drawer-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #F1F5F9;
+    background: #ffffff;
+}
+
+.inventory-movement-summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-top: 1px solid #F1F5F9;
+    background: #ffffff;
+}
+
+.summary-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-hint, #64748B);
+}
+
+.drawer-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.drawer-btn i {
+    width: 15px;
+    height: 15px;
+}
+
+.drawer-btn-secondary {
+    background: #ffffff;
+    color: #475569;
+    border-color: #E2E8F0;
+}
+
+.drawer-btn-primary {
+    background: var(--color-brand, #00C296);
+    color: #ffffff;
+}
+
+.drawer-btn-spacer {
+    flex: 1;
+}
+
+@media (max-width: 720px) {
+    .inventory-movement-drawer {
+        width: 100vw;
+    }
+
+    .inventory-movement-drawer-header,
+    .inventory-movement-drawer-body,
+    .inventory-movement-drawer-footer {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .inventory-movement-drawer-identity {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .inventory-movement-drawer-total {
+        text-align: left;
+    }
+
+    .inventory-movement-info-grid,
+    .inventory-movement-meta-cards {
+        grid-template-columns: 1fr;
+    }
+}

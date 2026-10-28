@@ -1,0 +1,15 @@
+.modal-form input:invalid:not(:placeholder-shown),
+.modal-form select:invalid:not(:placeholder-shown) {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.modal-form input:valid:not(:placeholder-shown),
+.modal-form select:valid:not(:placeholder-shown) {
+    border-color: #22c55e;
+}
+
+.form-group.full-width input,
+.form-group.full-width select {
+    width: 100%;
+}

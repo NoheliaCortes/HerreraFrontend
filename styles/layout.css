@@ -1,0 +1,9 @@
+/* --- LAYOUT PRINCIPAL --- */
+.main-content {
+  margin-left: 240px;
+  margin-top: 60px;
+  padding: 24px 32px; 
+  background-color: var(--color-bg-page, #F8FAFC);
+  min-height: calc(100vh - 60px);
+  overflow-y: auto;
+}

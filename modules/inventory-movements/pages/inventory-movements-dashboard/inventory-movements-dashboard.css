@@ -1,0 +1,123 @@
+@import url("../../../sales/salesDashboard/salesDashboard.css");
+
+.stats-row--five {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.stats-row--five .stat-card {
+    min-width: 0;
+}
+
+.inventory-movement-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.inventory-movement-alert {
+    display: none;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border: 1px solid rgba(0, 194, 150, 0.2);
+    border-radius: 8px;
+    background: rgba(0, 194, 150, 0.08);
+    color: #047857;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.inventory-movement-alert.active {
+    display: block;
+}
+
+.inventory-movement-alert.error {
+    border-color: rgba(220, 38, 38, 0.2);
+    background: rgba(220, 38, 38, 0.08);
+    color: #B91C1C;
+}
+
+.table-empty,
+.table-loading {
+    padding: 28px 16px;
+    text-align: center;
+    color: var(--color-text-hint, #6B7280);
+    font-weight: 600;
+}
+
+.table-empty {
+    display: table-cell;
+}
+
+.table-empty i {
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.table-empty--error {
+    color: #DC2626;
+}
+
+.movement-type-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    background: rgba(0, 194, 150, 0.1);
+    color: var(--color-brand, #00C296);
+}
+
+.movement-type-cell.transfer {
+    background: rgba(74, 144, 217, 0.12);
+    color: #2563EB;
+}
+
+.movement-type-cell.negative {
+    background: rgba(250, 137, 123, 0.12);
+    color: #DC2626;
+}
+
+.movement-type-cell.neutral {
+    background: #F1F5F9;
+    color: #64748B;
+}
+
+.movement-type-cell i {
+    width: 14px;
+    height: 14px;
+}
+
+.detail-btn {
+    display: inline-flex;
+}
+
+.stat-card.is-error .stat-card-value {
+    color: #DC2626;
+    font-size: 13px;
+}
+
+@media (max-width: 1200px) {
+    .stats-row--five {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .stats-row--five {
+        grid-template-columns: 1fr;
+    }
+
+    .inventory-movement-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    .inventory-movement-actions .btn {
+        flex: 1 1 calc(50% - 8px);
+    }
+}
