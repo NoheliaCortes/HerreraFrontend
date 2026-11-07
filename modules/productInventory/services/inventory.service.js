@@ -52,14 +52,15 @@ const InventoryService = (() => {
     }
 
     function _mapPagedResponse(pagedData) {
+        const rows = pagedData?.data ?? pagedData?.Data ?? [];
         return {
-            items: (pagedData?.data ?? []).map(dto => new InventoryProduct(dto)),
-            totalCount: pagedData?.totalRecords ?? 0,
-            pageNumber: pagedData?.currentPage ?? 1,
-            pageSize: pagedData?.pageSize ?? 10,
-            totalPages: pagedData?.totalPages ?? 1,
-            hasPreviousPage: Boolean(pagedData?.hasPreviousPage),
-            hasNextPage: Boolean(pagedData?.hasNextPage),
+            items: (Array.isArray(rows) ? rows : []).map(dto => new InventoryProduct(dto)),
+            totalCount: pagedData?.totalRecords ?? pagedData?.TotalRecords ?? 0,
+            pageNumber: pagedData?.currentPage ?? pagedData?.CurrentPage ?? 1,
+            pageSize: pagedData?.pageSize ?? pagedData?.PageSize ?? 10,
+            totalPages: pagedData?.totalPages ?? pagedData?.TotalPages ?? 1,
+            hasPreviousPage: Boolean(pagedData?.hasPreviousPage ?? pagedData?.HasPreviousPage),
+            hasNextPage: Boolean(pagedData?.hasNextPage ?? pagedData?.HasNextPage),
         };
     }
 
@@ -122,8 +123,8 @@ const InventoryService = (() => {
             });
 
             const pagedData = await _readEnvelope(response);
-            flavors.push(...(pagedData?.data ?? []));
-            hasNextPage = Boolean(pagedData?.hasNextPage);
+            flavors.push(...(pagedData?.data ?? pagedData?.Data ?? []));
+            hasNextPage = Boolean(pagedData?.hasNextPage ?? pagedData?.HasNextPage);
             page += 1;
         }
 
@@ -139,6 +140,7 @@ const InventoryService = (() => {
         const data = await _readEnvelope(response);
         if (Array.isArray(data)) return data;
         if (Array.isArray(data?.data)) return data.data;
+        if (Array.isArray(data?.Data)) return data.Data;
         return [];
     }
 
