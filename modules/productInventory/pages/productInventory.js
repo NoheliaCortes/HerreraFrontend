@@ -1,6 +1,5 @@
 let _currentPage = 1;
 const PAGE_SIZE = 10;
-const API_ORIGIN = 'https://localhost:7035';
 const PRODUCT_IMAGE_FALLBACK = '../../assets/img/logo.jpg';
 let _inventoryItems = [];
 let _linePresentations = [];
@@ -294,7 +293,9 @@ function _escape(value) {
 function _resolveProductImageUrl(imageUrl) {
     if (!imageUrl) return PRODUCT_IMAGE_FALLBACK;
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl;
-    return `${API_ORIGIN}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`;
+    const apiUrl = window.APP_API_URL;
+    if (!apiUrl) return imageUrl;
+    return `${new URL(apiUrl).origin}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`;
 }
 
 function _refreshIcons() {

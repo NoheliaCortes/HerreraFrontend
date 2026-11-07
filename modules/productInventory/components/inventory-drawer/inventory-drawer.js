@@ -8,7 +8,6 @@ let _selectedBatchId = null;
 let _selectedBatchDetail = null;
 let _selectedDetailTab = 'stock';
 
-const INVENTORY_API_ORIGIN = 'https://localhost:7035';
 const INVENTORY_PRODUCT_IMAGE_FALLBACK = '../../assets/img/logo.jpg';
 
 function initInventoryDrawer() {
@@ -286,7 +285,9 @@ function _setProductImage(id, imageUrl, productName, flavorName) {
 function _resolveProductImageUrl(imageUrl) {
     if (!imageUrl) return INVENTORY_PRODUCT_IMAGE_FALLBACK;
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl;
-    return `${INVENTORY_API_ORIGIN}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`;
+    const apiUrl = window.APP_API_URL;
+    if (!apiUrl) return imageUrl;
+    return `${new URL(apiUrl).origin}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`;
 }
 
 function _getFlavorInitial(flavorName) {

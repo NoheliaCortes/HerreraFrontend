@@ -4,8 +4,12 @@
  */
 
 const PricesService = (() => {
-    const API_ORIGIN = 'https://localhost:7035';
-    const BASE_URL = `${API_ORIGIN}/api`;
+    const CONFIG_PROMISE = import('../../core/config/app.config.js');
+
+    async function _getBaseUrl() {
+        const { CONFIG } = await CONFIG_PROMISE;
+        return CONFIG.API_URL;
+    }
 
     function _buildJsonHeaders() {
         return {
@@ -59,7 +63,7 @@ const PricesService = (() => {
         const params = new URLSearchParams();
         _appendParam(params, 'lineId', query.lineId);
 
-        const url = `${BASE_URL}/GeneralPrices/general${params.size ? `?${params}` : ''}`;
+        const url = `${await _getBaseUrl()}/GeneralPrices/general${params.size ? `?${params}` : ''}`;
         const response = await fetch(url, {
             method: 'GET',
             headers: _buildJsonHeaders(),
@@ -69,7 +73,7 @@ const PricesService = (() => {
     }
 
     async function createGeneralPrice(payload) {
-        const response = await fetch(`${BASE_URL}/GeneralPrices/general`, {
+        const response = await fetch(`${await _getBaseUrl()}/GeneralPrices/general`, {
             method: 'POST',
             headers: _buildJsonHeaders(),
             body: JSON.stringify(payload),
@@ -79,7 +83,7 @@ const PricesService = (() => {
     }
 
     async function changeGeneralPrice(linePresentationId, payload) {
-        const response = await fetch(`${BASE_URL}/GeneralPrices/general/${linePresentationId}`, {
+        const response = await fetch(`${await _getBaseUrl()}/GeneralPrices/general/${linePresentationId}`, {
             method: 'PUT',
             headers: _buildJsonHeaders(),
             body: JSON.stringify(payload),
@@ -89,7 +93,7 @@ const PricesService = (() => {
     }
 
     async function getPriceStatistics() {
-        const response = await fetch(`${BASE_URL}/prices/statistics`, {
+        const response = await fetch(`${await _getBaseUrl()}/prices/statistics`, {
             method: 'GET',
             headers: _buildJsonHeaders(),
         });
@@ -98,7 +102,7 @@ const PricesService = (() => {
     }
 
     async function getLinePresentations() {
-        const response = await fetch(`${BASE_URL}/LinePresentations`, {
+        const response = await fetch(`${await _getBaseUrl()}/LinePresentations`, {
             method: 'GET',
             headers: _buildJsonHeaders(),
         });

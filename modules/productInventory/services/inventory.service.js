@@ -4,8 +4,13 @@
  */
 
 const InventoryService = (() => {
-    const API_ORIGIN = 'https://localhost:7035';
-    const BASE_URL = `${API_ORIGIN}/api`;
+    const CONFIG_PROMISE = import('../../core/config/app.config.js');
+    CONFIG_PROMISE.then(({ CONFIG }) => { window.APP_API_URL = CONFIG.API_URL; });
+
+    async function _getBaseUrl() {
+        const { CONFIG } = await CONFIG_PROMISE;
+        return CONFIG.API_URL;
+    }
 
     function _buildJsonHeaders() {
         const headers = {
@@ -62,7 +67,7 @@ const InventoryService = (() => {
         const params = new URLSearchParams();
         _appendParam(params, 'period', period);
 
-        const response = await fetch(`${BASE_URL}/Inventory/stats?${params.toString()}`, {
+        const response = await fetch(`${await _getBaseUrl()}/Inventory/stats?${params.toString()}`, {
             method: 'GET',
             headers: _buildJsonHeaders(),
         });
@@ -79,7 +84,7 @@ const InventoryService = (() => {
         _appendParam(params, 'flavorId', query.flavorId);
         _appendParam(params, 'presentationId', query.presentationId);
 
-        const response = await fetch(`${BASE_URL}/Inventory?${params.toString()}`, {
+        const response = await fetch(`${await _getBaseUrl()}/Inventory?${params.toString()}`, {
             method: 'GET',
             headers: _buildJsonHeaders(),
         });
@@ -88,7 +93,7 @@ const InventoryService = (() => {
     }
 
     async function getProductBatches(productId) {
-        const response = await fetch(`${BASE_URL}/Inventory/products/${productId}/batches`, {
+        const response = await fetch(`${await _getBaseUrl()}/Inventory/products/${productId}/batches`, {
             method: 'GET',
             headers: _buildJsonHeaders(),
         });
@@ -97,7 +102,7 @@ const InventoryService = (() => {
     }
 
     async function getBatchDetail(batchId) {
-        const response = await fetch(`${BASE_URL}/Inventory/batches/${batchId}/detail`, {
+        const response = await fetch(`${await _getBaseUrl()}/Inventory/batches/${batchId}/detail`, {
             method: 'GET',
             headers: _buildJsonHeaders(),
         });
@@ -111,7 +116,7 @@ const InventoryService = (() => {
         let hasNextPage = true;
 
         while (hasNextPage) {
-            const response = await fetch(`${BASE_URL}/Flavors?page=${page}&pageSize=50`, {
+            const response = await fetch(`${await _getBaseUrl()}/Flavors?page=${page}&pageSize=50`, {
                 method: 'GET',
                 headers: _buildJsonHeaders(),
             });
@@ -126,7 +131,7 @@ const InventoryService = (() => {
     }
 
     async function getLinePresentations() {
-        const response = await fetch(`${BASE_URL}/LinePresentations`, {
+        const response = await fetch(`${await _getBaseUrl()}/LinePresentations`, {
             method: 'GET',
             headers: _buildJsonHeaders(),
         });
