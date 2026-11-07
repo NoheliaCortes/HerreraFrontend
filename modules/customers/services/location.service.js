@@ -1,6 +1,10 @@
 const LocationService = (() => {
+    const CONFIG_PROMISE = import('../../core/config/app.config.js');
 
-    const BASE_URL = 'https://localhost:7035/api';
+    async function _getBaseUrl() {
+        const { CONFIG } = await CONFIG_PROMISE;
+        return CONFIG.API_URL;
+    }
 
     function _buildHeaders() {
         return {
@@ -10,19 +14,25 @@ const LocationService = (() => {
 
     async function _handleResponse(res) {
 
-        const envelope = await res.json();
-
-        if (!envelope.success) {
-            throw new Error(envelope.message);
+        let envelope;
+        try {
+            envelope = await res.json();
+        } catch {
+            throw new Error(`Error HTTP ${res.status}`);
         }
 
-        return envelope.data;
+        const success = envelope.success ?? envelope.Success;
+        if (!res.ok || success === false) {
+            throw new Error(envelope.message ?? envelope.Message ?? `Error HTTP ${res.status}`);
+        }
+
+        return envelope.data ?? envelope.Data;
     }
 
     async function getDepartments() {
 
         const res = await fetch(
-            `${BASE_URL}/departments`,
+            `${await _getBaseUrl()}/departments`,
             {
                 method: 'GET',
                 headers: _buildHeaders()
@@ -35,7 +45,7 @@ const LocationService = (() => {
     async function getMunicipalitiesByDepartment(departmentId) {
 
         const res = await fetch(
-            `${BASE_URL}/municipalities/by-department/${departmentId}`,
+            `${await _getBaseUrl()}/municipalities/by-department/${departmentId}`,
             {
                 method: 'GET',
                 headers: _buildHeaders()

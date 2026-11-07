@@ -3,7 +3,7 @@
  * Capa de acceso a datos del módulo Clientes.
  * Todos los métodos devuelven objetos Customer o PagedResponse<Customer>.
  *
- * Base URL: https://localhost:7035/api/Customers
+ * Base URL: CONFIG.API_URL/Customers
  *
  * NOTA JWT: La autenticación Bearer está implementada en la API pero deshabilitada
  * durante desarrollo. Cuando se habilite, descomentar el header Authorization
@@ -11,8 +11,12 @@
  */
 
 const CustomerService = (() => {
+    const CONFIG_PROMISE = import('../../core/config/app.config.js');
 
-    const BASE_URL = 'https://localhost:7035/api/Customers';
+    async function _getBaseUrl() {
+        const { CONFIG } = await CONFIG_PROMISE;
+        return `${CONFIG.API_URL}/Customers`;
+    }
 
     // ─── Headers ────────────────────────────────────────────────────────────────
 
@@ -29,14 +33,22 @@ const CustomerService = (() => {
     // ─── Manejo de respuesta global ──────────────────────────────────────────────
 
     async function _handleResponse(res) {
-        const envelope = await res.json();
-
-        if (!envelope.success) {
-            // Lanza el mensaje de la API para mostrarlo en UI
-            throw new Error(envelope.message || 'Error desconocido de la API');
+        let envelope;
+        try {
+            envelope = await res.json();
+        } catch {
+            throw new Error(`Error HTTP ${res.status}`);
         }
 
-        return envelope.data;
+        const success = envelope.success ?? envelope.Success;
+        const message = envelope.message ?? envelope.Message;
+        const data = envelope.data ?? envelope.Data;
+        if (!res.ok || success === false) {
+            // Lanza el mensaje de la API para mostrarlo en UI
+            throw new Error(message || `Error HTTP ${res.status}`);
+        }
+
+        return data;
     }
 
     // ─── NUEVO: GET /api/Customers/stats ──────────────────────────────────────────
@@ -46,7 +58,7 @@ const CustomerService = (() => {
      * @returns {Promise<{activeCustomers: number, inactiveCustomers: number, distinctMunicipalitiesWithCustomers: number, activePointsOfSale: number}>}
      */
     async function getStats() {
-        const res = await fetch(`${BASE_URL}/stats`, {
+        const res = await fetch(`${await _getBaseUrl()}/stats`, {
             method:  'GET',
             headers: _buildHeaders(),
         });
@@ -84,7 +96,7 @@ const CustomerService = (() => {
             params.append('municipalityId', municipalityId);
         }
 
-        const url = `${BASE_URL}?${params.toString()}`;
+        const url = `${await _getBaseUrl()}?${params.toString()}`;
 
         const res = await fetch(url, {
             method:  'GET',
@@ -95,13 +107,13 @@ const CustomerService = (() => {
 
         // Mapeo adaptado a la respuesta estructurada de tu API de C#
         return {
-            items:           pagedData.data.map(dto => new Customer(dto)),
-            totalCount:      pagedData.totalRecords, 
-            pageNumber:      pagedData.currentPage,  
-            pageSize:        pagedData.pageSize,     
-            totalPages:      pagedData.totalPages,   
-            hasPreviousPage: pagedData.hasPreviousPage,
-            hasNextPage:     pagedData.hasNextPage
+            items:           (pagedData.data ?? pagedData.Data ?? []).map(dto => new Customer(dto)),
+            totalCount:      pagedData.totalRecords ?? pagedData.TotalRecords ?? 0,
+            pageNumber:      pagedData.currentPage ?? pagedData.CurrentPage ?? pageNumber,
+            pageSize:        pagedData.pageSize ?? pagedData.PageSize ?? pageSize,
+            totalPages:      pagedData.totalPages ?? pagedData.TotalPages ?? 1,
+            hasPreviousPage: pagedData.hasPreviousPage ?? pagedData.HasPreviousPage ?? false,
+            hasNextPage:     pagedData.hasNextPage ?? pagedData.HasNextPage ?? false
         };
     }
     // ─── GET /api/Customers/{id} ─────────────────────────────────────────────────
@@ -113,7 +125,7 @@ const CustomerService = (() => {
      * @throws Error si no se encuentra (404)
      */
     async function getById(id) {
-        const res = await fetch(`${BASE_URL}/${id}`, {
+        const res = await fetch(`${await _getBaseUrl()}/${id}`, {
             method:  'GET',
             headers: _buildHeaders(),
         });
@@ -133,7 +145,7 @@ const CustomerService = (() => {
     async function create(formData) {
         const body = Customer.toCreateDto(formData);
 
-        const res = await fetch(BASE_URL, {
+        const res = await fetch(await _getBaseUrl(), {
             method:  'POST',
             headers: _buildHeaders(),
             body:    JSON.stringify(body),
@@ -155,7 +167,7 @@ const CustomerService = (() => {
     async function update(id, formData) {
         const body = Customer.toUpdateDto(formData);
 
-        const res = await fetch(`${BASE_URL}/${id}`, {
+        const res = await fetch(`${await _getBaseUrl()}/${id}`, {
             method:  'PUT',
             headers: _buildHeaders(),
             body:    JSON.stringify(body),
@@ -173,7 +185,7 @@ const CustomerService = (() => {
      * @throws Error si no existe (404) o tiene órdenes/ventas asociadas (400)
      */
     async function remove(id) {
-        const res = await fetch(`${BASE_URL}/${id}`, {
+        const res = await fetch(`${await _getBaseUrl()}/${id}`, {
             method:  'DELETE',
             headers: _buildHeaders(),
         });
